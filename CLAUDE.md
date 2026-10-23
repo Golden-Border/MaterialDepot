@@ -34,7 +34,7 @@ The output has to match what the existing materials in existing Stride projects 
 
 - A PNG is written with depth 8 (Stride has no sRGB variant for 16-bit formats, so a 16-bit albedo renders too bright) and without date and time chunks, so the same source always gives the same bytes.
 - `.sdtex`: albedo `!ColorTextureType` with the magenta `ColorKeyColor`, normal `!NormalMapTextureType {}`, roughness, metallic and ao `!GrayscaleTextureType {}`. Compression and mipmaps stay at Stride's defaults.
-- `.sdmat`: normal map, glossiness from roughness with `Invert: true`, diffuse, metalness (only with a metallic map), occlusion with ambient and cavity map from ao and `DirectLightingFactor` 0 (only with an ao map), no emissive, `UVScale` from the tile size.
+- `.sdmat`: normal map, glossiness from roughness with `Invert: true`, diffuse, metalness (only with a metallic map), occlusion with ambient and cavity map from ao and `DirectLightingFactor` 0 (only with an ao map), no emissive. `UVScale` defaults to 1; the real-world tiling (metres per UV unit ÷ tile size) is only an opt-in in the dialog, because it can be too fine to read from the game camera.
 - An asset that already exists keeps its `Id`, so models that reference it stay intact. The `.sdmat` is rewritten as a whole.
 - Stride YAML assets are ASCII with CRLF and a trailing newline.
 

@@ -12,60 +12,52 @@ namespace MaterialDepot.App.ViewModels;
 /// <summary>
 /// The import dialog: names, tiling and an optional material Id for one set and one project.
 /// </summary>
-public sealed partial class ImportViewModel : ObservableObject
+public sealed partial class ImportViewModel(TextureSet set, StrideProject project, IStrideMaterialImporter importer, IDialogService dialogs)
+    : ObservableObject
 {
-    private readonly IStrideMaterialImporter importer;
-    private readonly IDialogService dialogs;
     private bool updatingUvScale;
 
-    public ImportViewModel(TextureSet set, StrideProject project, IStrideMaterialImporter importer, IDialogService dialogs)
-    {
-        this.importer = importer;
-        this.dialogs = dialogs;
-        Set = set;
-        Project = project;
-        MaterialName = set.Name;
-        TextureFolderName = set.Name;
-        MaterialDirectory = project.MaterialDirectory;
-        var tileSize = TextureSetNaming.TileSizeMeters(set.Albedo?.BaseName ?? string.Empty);
-        TileSizeText = tileSize is { } size ? Format(size) : string.Empty;
-        MetersPerUvUnitText = "1";
-        Maps = MapLabels.Of(set.Maps.Keys.Where(map => map != PbrMap.Height));
-        UpdateUvScale();
-    }
+    public TextureSet Set { get; } = set;
 
-    public TextureSet Set { get; }
+    public StrideProject Project { get; } = project;
 
-    public StrideProject Project { get; }
-
-    public IReadOnlyList<string> Maps { get; }
+    public IReadOnlyList<string> Maps { get; } = MapLabels.Of(set.Maps.Keys.Where(map => map != PbrMap.Height));
 
     public ImageSource? Thumbnail { get; init; }
 
+    /// <summary>
+    /// The tile size textures.com puts into some file names (<c>_4x4_</c>), as a hint; it is not applied on its own.
+    /// </summary>
+    public string TileSizeFromName { get; } = TextureSetNaming.TileSizeMeters(set.Albedo?.BaseName ?? string.Empty) is { } size
+        ? $"Laut Dateiname {Format(size)} m je Kachel."
+        : string.Empty;
+
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(MaterialNote))]
     [NotifyCanExecuteChangedFor(nameof(ImportCommand))]
-    public partial string MaterialName { get; set; }
+    public partial string MaterialName { get; set; } = set.Name;
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(ImportCommand))]
-    public partial string TextureFolderName { get; set; }
+    public partial string TextureFolderName { get; set; } = set.Name;
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(MaterialNote))]
-    public partial string MaterialDirectory { get; set; }
+    public partial string MaterialDirectory { get; set; } = project.MaterialDirectory;
 
     /// <summary>
-    /// The edge length of one texture tile in metres, as textures.com states it (20 x 20 cm gives 0.2).
+    /// The edge length of one texture tile in metres, as textures.com states it (20 x 20 cm gives 0.2). Optional: with it,
+    /// UVScale is set to the real-world tiling. It starts empty and UVScale at 1, because a 20 cm rust tile at its real
+    /// size blurred into plain brown from the game camera.
     /// </summary>
     [ObservableProperty]
-    public partial string TileSizeText { get; set; }
+    public partial string TileSizeText { get; set; } = string.Empty;
 
     /// <summary>
     /// How many metres one UV unit covers on the meshes the material goes on.
     /// </summary>
     [ObservableProperty]
-    public partial string MetersPerUvUnitText { get; set; }
+    public partial string MetersPerUvUnitText { get; set; } = "1";
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(ImportCommand))]

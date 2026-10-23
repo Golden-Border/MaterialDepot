@@ -58,17 +58,21 @@
                 <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding TextureFolderName, UpdateSourceTrigger=PropertyChanged}"
                          ToolTip="Unterordner für die PNGs und die .sdtex; üblich ist der Produktname des Sets" />
 
-                <TextBlock Grid.Row="4" Text="Kachelgröße (m)" />
+                <TextBlock Grid.Row="4" Text="Kachelgröße (m, optional)" />
                 <TextBox Grid.Row="4" Grid.Column="1" Width="120" HorizontalAlignment="Left" Text="{Binding TileSizeText, UpdateSourceTrigger=PropertyChanged}" />
-                <TextBlock Grid.Row="5" Grid.Column="1" Style="{StaticResource Hint}"
-                           Text="Kantenlänge einer Kachel, wie textures.com sie angibt: 20 × 20 cm ist 0,2." />
+                <StackPanel Grid.Row="5" Grid.Column="1">
+                    <TextBlock Style="{StaticResource Hint}" Margin="0,2,0,0" Foreground="{StaticResource Accent}"
+                               Text="{Binding TileSizeFromName}" Visibility="{Binding TileSizeFromName, Converter={StaticResource Presence}}" />
+                    <TextBlock Style="{StaticResource Hint}"
+                           Text="Nur ausfüllen, wenn die Textur in echter Größe liegen soll; textures.com gibt sie an, 20 × 20 cm ist 0,2. Echte Größe kann aus der Spielkamera zu fein wirken: Heavy Rust 3 auf Schlüssel und Schloss sah bei 2,5 nur noch braun aus, mit 1 stimmt es." />
+                </StackPanel>
                 <TextBlock Grid.Row="6" Text="Meter pro UV-Einheit" />
                 <TextBox Grid.Row="6" Grid.Column="1" Width="120" HorizontalAlignment="Left" Text="{Binding MetersPerUvUnitText, UpdateSourceTrigger=PropertyChanged}" />
                 <TextBlock Grid.Row="7" Grid.Column="1" Style="{StaticResource Hint}"
                            Text="Wie viel Fläche eine UV-Einheit auf den Meshes abdeckt: z. B. 1 für Wände und Böden, 0,5 für kleine Props." />
                 <TextBlock Grid.Row="8" Text="UVScale" />
                 <TextBox Grid.Row="8" Grid.Column="1" Width="120" HorizontalAlignment="Left" Text="{Binding UvScaleText, UpdateSourceTrigger=PropertyChanged}"
-                         ToolTip="Ergibt sich aus den beiden Feldern darüber; lässt sich auch direkt eintragen" />
+                         ToolTip="Standard 1; mit einer Kachelgröße errechnet aus den beiden Feldern darüber" />
                 <TextBlock Grid.Row="9" Text="Material-Id (optional)" />
                 <TextBox Grid.Row="9" Grid.Column="1" Text="{Binding MaterialIdText, UpdateSourceTrigger=PropertyChanged}"
                          ToolTip="Nur nötig, wenn Modelle schon eine Material-Id erwarten, die es noch nicht gibt" />
