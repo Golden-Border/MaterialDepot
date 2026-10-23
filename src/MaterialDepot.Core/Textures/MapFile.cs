@@ -12,24 +12,29 @@ public sealed partial record MapFile(string Path, string BaseName, PbrMap Map)
 {
     private static readonly string[] imageExtensions = [".tif", ".tiff", ".png", ".jpg", ".jpeg"];
 
-    // Longest first, so "nor_gl" wins over a shorter token that happens to end the name.
-    private static readonly (string Token, PbrMap Map)[] mapTokens =
-    [
-        ("basecolor", PbrMap.Albedo),
-        ("albedo", PbrMap.Albedo),
-        ("diffuse", PbrMap.Albedo),
-        ("diff", PbrMap.Albedo),
-        ("nor_gl", PbrMap.Normal),
-        ("normal", PbrMap.Normal),
-        ("roughness", PbrMap.Roughness),
-        ("rough", PbrMap.Roughness),
-        ("metallic", PbrMap.Metallic),
-        ("metalness", PbrMap.Metallic),
-        ("ao", PbrMap.AmbientOcclusion),
-        ("height", PbrMap.Height),
-        ("displacement", PbrMap.Height),
-        ("disp", PbrMap.Height),
-    ];
+    // Compared without case, spaces, hyphens and underscores, so "Base Color", "baseColor" and "basecolor" are one token.
+    // DirectX normal maps (NormalDX, nor_dx) are left out on purpose: Stride takes the OpenGL convention.
+    private static readonly Dictionary<string, PbrMap> mapTokens = new(StringComparer.Ordinal)
+    {
+        ["albedo"] = PbrMap.Albedo,
+        ["basecolor"] = PbrMap.Albedo,
+        ["color"] = PbrMap.Albedo,
+        ["diffuse"] = PbrMap.Albedo,
+        ["diff"] = PbrMap.Albedo,
+        ["normal"] = PbrMap.Normal,
+        ["normalgl"] = PbrMap.Normal,
+        ["normalogl"] = PbrMap.Normal,
+        ["norgl"] = PbrMap.Normal,
+        ["roughness"] = PbrMap.Roughness,
+        ["rough"] = PbrMap.Roughness,
+        ["metallic"] = PbrMap.Metallic,
+        ["metalness"] = PbrMap.Metallic,
+        ["ao"] = PbrMap.AmbientOcclusion,
+        ["ambientocclusion"] = PbrMap.AmbientOcclusion,
+        ["height"] = PbrMap.Height,
+        ["displacement"] = PbrMap.Height,
+        ["disp"] = PbrMap.Height,
+    };
 
     /// <summary>
     /// The file name without its extension, which an imported copy keeps.
@@ -37,28 +42,27 @@ public sealed partial record MapFile(string Path, string BaseName, PbrMap Map)
     public string Stem => System.IO.Path.GetFileNameWithoutExtension(Path);
 
     /// <summary>
-    /// Recognises textures.com names (<c>TCom_HeavyRust3_1K_albedo.tif</c>) and Poly Haven names
-    /// (<c>aerial_rocks_04_diff_4k.jpg</c>). Anything else is not a map file.
+    /// Recognises the map token at the end of the name, after the last <c>_</c> or <c>-</c> and before an optional
+    /// resolution: textures.com (<c>TCom_HeavyRust3_1K_albedo.tif</c>), Poly Haven (<c>aerial_rocks_04_nor_gl_4k.png</c>),
+    /// ambientCG (<c>Grass001_1K_Color.png</c>) and Substance exports (<c>Rock_Base Color.png</c>). Anything else is not a map file.
     /// </summary>
     public static bool TryParse(string path, out MapFile mapFile)
     {
         mapFile = null!;
-        var extension = System.IO.Path.GetExtension(path).ToLowerInvariant();
-        if (!imageExtensions.Contains(extension))
+        if (!imageExtensions.Contains(System.IO.Path.GetExtension(path).ToLowerInvariant()))
         {
             return false;
         }
 
         var stem = System.IO.Path.GetFileNameWithoutExtension(path);
         var resolution = TrailingResolution().Match(stem);
-        var withoutResolution = resolution.Success ? stem[..resolution.Index] : stem;
+        var name = resolution.Success ? stem[..resolution.Index] : stem;
 
-        foreach (var (token, map) in mapTokens)
+        foreach (var tokenStart in TokenStarts(name))
         {
-            var suffix = "_" + token;
-            if (withoutResolution.EndsWith(suffix, StringComparison.OrdinalIgnoreCase) && withoutResolution.Length > suffix.Length)
+            if (tokenStart > 1 && mapTokens.TryGetValue(Normalize(name[tokenStart..]), out var map))
             {
-                mapFile = new MapFile(path, withoutResolution[..^suffix.Length], map);
+                mapFile = new MapFile(path, name[..(tokenStart - 1)], map);
                 return true;
             }
         }
@@ -66,6 +70,28 @@ public sealed partial record MapFile(string Path, string BaseName, PbrMap Map)
         return false;
     }
 
-    [GeneratedRegex(@"_\d+k$", RegexOptions.IgnoreCase)]
+    /// <summary>
+    /// Where the last token, and the last two joined by an underscore (<c>nor_gl</c>), start; the longer one first.
+    /// </summary>
+    private static IEnumerable<int> TokenStarts(string name)
+    {
+        var last = name.LastIndexOfAny(['_', '-']);
+        if (last < 0)
+        {
+            yield break;
+        }
+
+        var beforeLast = last > 0 ? name.LastIndexOf('_', last - 1) : -1;
+        if (beforeLast >= 0)
+        {
+            yield return beforeLast + 1;
+        }
+
+        yield return last + 1;
+    }
+
+    private static string Normalize(string token) => new([.. token.Where(char.IsLetterOrDigit).Select(char.ToLowerInvariant)]);
+
+    [GeneratedRegex(@"[_-]\d+k$", RegexOptions.IgnoreCase)]
     private static partial Regex TrailingResolution();
 }
