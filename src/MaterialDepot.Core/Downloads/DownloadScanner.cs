@@ -28,6 +28,8 @@ public sealed class DownloadScanner : IDownloadScanner
         var libraryFiles = LibraryFileNames(library);
         return [.. found
             .GroupBy(entry => entry.BaseName, StringComparer.OrdinalIgnoreCase)
+            // A download folder holds all kinds of images; a lone "_color.png" is far more often a screenshot than a texture set.
+            .Where(group => group.Select(entry => entry.File.Map).Distinct().Count() >= 2)
             .OrderBy(group => group.Key, StringComparer.OrdinalIgnoreCase)
             .Select(group =>
             {

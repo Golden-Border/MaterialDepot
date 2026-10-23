@@ -1,0 +1,90 @@
+<UserControl x:Class="MaterialDepot.App.Views.SettingsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="clr-namespace:MaterialDepot.App.ViewModels"
+             mc:Ignorable="d"
+             d:DataContext="{d:DesignInstance Type=vm:SettingsViewModel}">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <StackPanel Margin="4,14,4,4" MaxWidth="900" HorizontalAlignment="Left">
+            <TextBlock Text="Ordner" Style="{StaticResource Heading}" />
+            <Grid Margin="0,10,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="160" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <TextBlock Text="Bibliothek" Style="{StaticResource FieldLabel}" />
+                <TextBox Grid.Column="1" Text="{Binding LibraryRoot, UpdateSourceTrigger=PropertyChanged}" />
+                <Button Grid.Column="2" Margin="8,0,0,0" Content="Wählen …" Command="{Binding BrowseLibraryCommand}" />
+                <TextBlock Grid.Row="1" Grid.Column="1" Style="{StaticResource Hint}" Text="Ein Unterordner pro Set, mit den Original-Downloads." />
+                <TextBlock Grid.Row="2" Text="Downloads" Style="{StaticResource FieldLabel}" />
+                <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding DownloadsDirectory, UpdateSourceTrigger=PropertyChanged}" />
+                <Button Grid.Row="2" Grid.Column="2" Margin="8,0,0,0" Content="Wählen …" Command="{Binding BrowseDownloadsCommand}" />
+                <TextBlock Grid.Row="3" Grid.Column="1" Style="{StaticResource Hint}" Text="Hier sucht der Eingang nach neuen Sets, lose und in Zips." />
+            </Grid>
+
+            <DockPanel Margin="0,18,0,0" LastChildFill="False">
+                <TextBlock DockPanel.Dock="Left" Text="Stride-Projekte" Style="{StaticResource Heading}" />
+                <Button DockPanel.Dock="Right" Margin="8,0,0,0" Content="Entfernen" Command="{Binding RemoveProjectCommand}" />
+                <Button DockPanel.Dock="Right" Content="Projekt hinzufügen" Command="{Binding AddProjectCommand}" />
+            </DockPanel>
+            <TextBlock Style="{StaticResource Hint}"
+                       Text="Ordner relativ zum Projektordner bzw. zum Asset-Ordner. Beispiel: Quellbilder in Assets/Textures, Assets in Game/Assets, Texturen und Materialien je in Materials." />
+            <ListBox Margin="0,6,0,0" ItemsSource="{Binding Projects}" SelectedItem="{Binding SelectedProject}"
+                     DisplayMemberPath="Name" MinHeight="60" MaxHeight="140" />
+
+            <Grid Margin="0,10,0,0" DataContext="{Binding SelectedProject}" Visibility="{Binding Converter={StaticResource Presence}}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="160" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <Grid.Resources>
+                    <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
+                        <Setter Property="Margin" Value="0,0,0,6" />
+                    </Style>
+                    <Style TargetType="TextBlock" BasedOn="{StaticResource FieldLabel}">
+                        <Setter Property="Margin" Value="0,0,12,6" />
+                    </Style>
+                </Grid.Resources>
+                <TextBlock Text="Name" />
+                <TextBox Grid.Column="1" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
+                <TextBlock Grid.Row="1" Text="Projektordner" />
+                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding RootDirectory, UpdateSourceTrigger=PropertyChanged}" />
+                <Button Grid.Row="1" Grid.Column="2" Margin="8,0,0,6" Content="Wählen …"
+                        Command="{Binding DataContext.BrowseProjectRootCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                        CommandParameter="{Binding}" />
+                <TextBlock Grid.Row="2" Text="Quellbilder" />
+                <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding SourceTextureDirectory, UpdateSourceTrigger=PropertyChanged}" />
+                <TextBlock Grid.Row="3" Text="Asset-Ordner" />
+                <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding AssetsDirectory, UpdateSourceTrigger=PropertyChanged}" />
+                <TextBlock Grid.Row="4" Text="Texturen (.sdtex)" />
+                <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding TextureAssetDirectory, UpdateSourceTrigger=PropertyChanged}" />
+                <TextBlock Grid.Row="5" Text="Materialien (.sdmat)" />
+                <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding MaterialDirectory, UpdateSourceTrigger=PropertyChanged}" />
+            </Grid>
+
+            <StackPanel Margin="0,16,0,0" Orientation="Horizontal">
+                <Button Style="{StaticResource PrimaryButton}" Content="Speichern" Command="{Binding SaveCommand}" />
+                <Button Margin="8,0,0,0" Content="Verwerfen" Command="{Binding ResetCommand}" />
+                <TextBlock Margin="12,0,0,0" VerticalAlignment="Center" Text="{Binding SavedNote}" Foreground="{StaticResource Success}" />
+            </StackPanel>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

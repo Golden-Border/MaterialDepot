@@ -22,7 +22,7 @@ public sealed class DownloadScannerTests : IDisposable
     public void Scan_GroupsLooseMapFilesByBaseName()
     {
         // Arrange
-        Write("TCom_HeavyRust3_1K_albedo.tif", "TCom_HeavyRust3_1K_normal.tif", "TCom_Rock_CliffVolcanic_2K_albedo.tif", "invoice.pdf", "photo.jpg");
+        Write("TCom_HeavyRust3_1K_albedo.tif", "TCom_HeavyRust3_1K_normal.tif", "TCom_Rock_CliffVolcanic_2K_albedo.tif", "TCom_Rock_CliffVolcanic_2K_ao.tif", "invoice.pdf", "photo.jpg");
 
         // Act
         var candidates = sut.Scan(downloads, []);
@@ -53,6 +53,16 @@ public sealed class DownloadScannerTests : IDisposable
         // Assert
         candidate.Files.Select(file => file.ZipEntry).ShouldBe(["Heavy Rust 3/TCom_HeavyRust3_1K_albedo.tif", "Heavy Rust 3/TCom_HeavyRust3_1K_ao.tif"]);
         candidate.SourceFiles.ShouldBe([zipPath]);
+    }
+
+    [Fact]
+    public void Scan_IgnoresALoneMap()
+    {
+        // Arrange
+        Write("snapshot-for-split-button-basic-1-color.png", "TCom_HeavyRust3_1K_albedo.tif");
+
+        // Act & Assert
+        sut.Scan(downloads, []).ShouldBeEmpty();
     }
 
     [Fact]
