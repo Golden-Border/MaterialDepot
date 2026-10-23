@@ -1,0 +1,7 @@
+* text=auto
+
+# C# source must use CRLF regardless of the committer's OS/autocrlf setting,
+# matching end_of_line = crlf in .editorconfig
+*.cs text eol=crlf
+*.xaml text eol=crlf
+

@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/MaterialDepot.App/MaterialDepot.App.csproj" />
+    <Project Path="src/MaterialDepot.Core/MaterialDepot.Core.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/MaterialDepot.Core.Tests/MaterialDepot.Core.Tests.csproj" />
+  </Folder>
+</Solution>
