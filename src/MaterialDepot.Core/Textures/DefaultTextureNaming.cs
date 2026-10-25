@@ -10,10 +10,10 @@ public static class DefaultTextureNaming
     /// in the map: textures.com (<c>TCom_HeavyRust3_1K_albedo</c>), ambientCG (<c>Grass001_1K_Color</c>) and
     /// Substance (<c>Rock_Base Color</c>). The name is matched lazily, so the map is the shortest tail that is a map name.
     /// </summary>
-    public static IReadOnlyList<string> FilePatterns { get; } =
+    public static IReadOnlyList<FilePattern> FilePatterns { get; } =
     [
-        @"^(?<name>.+?)[_-](?<map>[A-Za-z]+(?:_gl|_ogl)?)[_-](?<res>\d+k)$",
-        @"^(?<name>.+?)[_-](?<map>[A-Za-z]+(?: [A-Za-z]+)?(?:[_-]gl|[_-]ogl)?)$",
+        new("Poly Haven", @"^(?<name>.+?)[_-](?<map>[A-Za-z]+(?:_gl|_ogl)?)[_-](?<res>\d+k)$"),
+        new("textures.com, ambientCG, Substance", @"^(?<name>.+?)[_-](?<map>[A-Za-z]+(?: [A-Za-z]+)?(?:[_-]gl|[_-]ogl)?)$"),
     ];
 
     /// <summary>

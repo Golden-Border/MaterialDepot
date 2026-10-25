@@ -90,7 +90,7 @@ public class MapFileParserTests
     {
         // Arrange
         var sut = new MapFileParser(
-            [@"^(?<map>[a-z]+)\.(?<name>.+)$"],
+            [new FilePattern("Test", @"^(?<map>[a-z]+)\.(?<name>.+)$")],
             new Dictionary<PbrMap, IReadOnlyList<string>> { [PbrMap.Albedo] = ["col"], [PbrMap.Normal] = ["nrm"] });
 
         // Act
@@ -107,7 +107,7 @@ public class MapFileParserTests
     public void TryParse_SkipsInvalidPatternsInsteadOfThrowing()
     {
         // Arrange
-        var sut = new MapFileParser(["(?<name>", @"^(?<name>.+)_(?<other>x)$", @"^(?<name>.+)_(?<map>[a-z]+)$"], DefaultTextureNaming.MapNames);
+        var sut = new MapFileParser([new FilePattern("Kaputt", "(?<name>"), new FilePattern("Ohne map", @"^(?<name>.+)_(?<other>x)$"), new FilePattern("Gut", @"^(?<name>.+)_(?<map>[a-z]+)$")], DefaultTextureNaming.MapNames);
 
         // Act
         var recognised = sut.TryParse(Path.Combine("C:", "Textures", "Brick_albedo.png"), out var mapFile);
@@ -121,7 +121,7 @@ public class MapFileParserTests
     public void TryParse_PatternThatBacktracksForever_IsNoMatchInsteadOfAHang()
     {
         // Arrange
-        var sut = new MapFileParser([@"^(?<name>(a+)+)_(?<map>b)$"], DefaultTextureNaming.MapNames);
+        var sut = new MapFileParser([new FilePattern("Endlos", @"^(?<name>(a+)+)_(?<map>b)$")], DefaultTextureNaming.MapNames);
 
         // Act
         var recognised = sut.TryParse(Path.Combine("C:", "Textures", new string('a', 60) + "_c.png"), out _);

@@ -46,6 +46,7 @@
                                 <Button DockPanel.Dock="Right" Margin="8,0,0,0" Content="Entfernen"
                                         Command="{Binding DataContext.RemovePatternCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                         CommandParameter="{Binding}" />
+                                <TextBox DockPanel.Dock="Left" Width="200" Margin="0,0,8,0" ToolTip="Name des Musters" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
                                 <TextBox FontFamily="Consolas" Text="{Binding Text, UpdateSourceTrigger=PropertyChanged}" />
                             </DockPanel>
                             <TextBlock Foreground="{StaticResource Warning}" TextWrapping="Wrap" Text="{Binding Error}"

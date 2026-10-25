@@ -11,13 +11,13 @@ public sealed record DepotSettings
     /// <param name="libraryRoot">The library, one folder per texture set.</param>
     /// <param name="downloadsDirectory">Where the browser puts downloads.</param>
     /// <param name="projects">The import targets.</param>
-    /// <param name="filePatterns">Regular expressions that recognise map files, see <see cref="MapFileParser"/>; <see langword="null"/> (a settings file from before they existed) means <see cref="DefaultTextureNaming.FilePatterns"/>.</param>
+    /// <param name="filePatterns">Named regular expressions that recognise map files, see <see cref="MapFileParser"/>; <see langword="null"/> (a settings file from before they existed) means <see cref="DefaultTextureNaming.FilePatterns"/>.</param>
     /// <param name="mapNames">The names each map goes by in file names; <see langword="null"/> means <see cref="DefaultTextureNaming.MapNames"/>.</param>
     public DepotSettings(
         string libraryRoot,
         string downloadsDirectory,
         IReadOnlyList<StrideProject> projects,
-        IReadOnlyList<string>? filePatterns = null,
+        IReadOnlyList<FilePattern>? filePatterns = null,
         IReadOnlyDictionary<PbrMap, IReadOnlyList<string>>? mapNames = null)
     {
         LibraryRoot = libraryRoot;
@@ -33,7 +33,7 @@ public sealed record DepotSettings
 
     public IReadOnlyList<StrideProject> Projects { get; }
 
-    public IReadOnlyList<string> FilePatterns { get; }
+    public IReadOnlyList<FilePattern> FilePatterns { get; }
 
     public IReadOnlyDictionary<PbrMap, IReadOnlyList<string>> MapNames { get; }
 

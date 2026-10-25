@@ -17,11 +17,11 @@ public sealed class MapFileParser
     private readonly List<Regex> patterns;
     private readonly Dictionary<string, PbrMap> mapByToken = new(StringComparer.Ordinal);
 
-    /// <param name="patterns">Regular expressions, tried in order.</param>
+    /// <param name="patterns">The patterns, tried in order.</param>
     /// <param name="mapNames">The names each map goes by in file names; compared without case, spaces, hyphens and underscores, so "Base Color", "baseColor" and "base_color" are one name. If two maps share a name, the first wins.</param>
-    public MapFileParser(IEnumerable<string> patterns, IReadOnlyDictionary<PbrMap, IReadOnlyList<string>> mapNames)
+    public MapFileParser(IEnumerable<FilePattern> patterns, IReadOnlyDictionary<PbrMap, IReadOnlyList<string>> mapNames)
     {
-        this.patterns = [.. patterns.Where(pattern => Validate(pattern) is null).Select(Compile)];
+        this.patterns = [.. patterns.Where(pattern => Validate(pattern.Regex) is null).Select(pattern => Compile(pattern.Regex))];
         foreach (var (map, names) in mapNames)
         {
             foreach (var name in names)

@@ -63,14 +63,14 @@ public sealed class JsonSettingsStoreTests : IDisposable
     {
         // Arrange
         var mapNames = new Dictionary<PbrMap, IReadOnlyList<string>> { [PbrMap.Albedo] = ["col", "base"], [PbrMap.Normal] = ["nrm"] };
-        var settings = new DepotSettings("D:/Textures", "D:/Downloads", [], [@"^(?<name>.+)\.(?<map>[a-z]+)$"], mapNames);
+        var settings = new DepotSettings("D:/Textures", "D:/Downloads", [], [new FilePattern("Test", @"^(?<name>.+)\.(?<map>[a-z]+)$")], mapNames);
 
         // Act
         sut.Save(settings);
         var loaded = sut.Load();
 
         // Assert
-        loaded.FilePatterns.ShouldBe([@"^(?<name>.+)\.(?<map>[a-z]+)$"]);
+        loaded.FilePatterns.ShouldBe([new FilePattern("Test", @"^(?<name>.+)\.(?<map>[a-z]+)$")]);
         loaded.MapNames[PbrMap.Albedo].ShouldBe(["col", "base"]);
         loaded.MapNames[PbrMap.Normal].ShouldBe(["nrm"]);
     }

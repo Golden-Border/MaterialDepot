@@ -84,7 +84,7 @@ public sealed partial class SettingsViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private void AddPattern() => Patterns.Add(Watch(new PatternEditorViewModel("^(?<name>.+?)_(?<map>[A-Za-z]+)$")));
+    private void AddPattern() => Patterns.Add(Watch(new PatternEditorViewModel(new FilePattern("Neues Muster", "^(?<name>.+?)_(?<map>[A-Za-z]+)$"))));
 
     [RelayCommand]
     private void RemovePattern(PatternEditorViewModel pattern) => Patterns.Remove(pattern);
@@ -118,7 +118,7 @@ public sealed partial class SettingsViewModel : ObservableObject
             LibraryRoot.Trim(),
             DownloadsDirectory.Trim(),
             [.. Projects.Select(project => project.ToProject())],
-            [.. Patterns.Select(pattern => pattern.Text.Trim())],
+            [.. Patterns.Select(pattern => pattern.ToPattern())],
             MapNames.ToDictionary(row => row.Map, row => row.Names));
         var rescan = old.LibraryRoot != settings.LibraryRoot || !SameNaming(old, settings);
         session.SaveSettings(settings);
@@ -155,7 +155,7 @@ public sealed partial class SettingsViewModel : ObservableObject
         && a.MapNames.Count == b.MapNames.Count
         && a.MapNames.All(pair => b.MapNames.TryGetValue(pair.Key, out var names) && pair.Value.SequenceEqual(names));
 
-    private void ShowNaming(IEnumerable<string> patterns, IReadOnlyDictionary<PbrMap, IReadOnlyList<string>> mapNames)
+    private void ShowNaming(IEnumerable<FilePattern> patterns, IReadOnlyDictionary<PbrMap, IReadOnlyList<string>> mapNames)
     {
         Patterns.Clear();
         foreach (var pattern in patterns)
@@ -189,7 +189,7 @@ public sealed partial class SettingsViewModel : ObservableObject
             return;
         }
 
-        var parser = new MapFileParser(Patterns.Select(pattern => pattern.Text), MapNames.ToDictionary(row => row.Map, row => row.Names));
+        var parser = new MapFileParser(Patterns.Select(pattern => pattern.ToPattern()), MapNames.ToDictionary(row => row.Map, row => row.Names));
         var parsed = parser.Parse(Path.GetFileNameWithoutExtension(fileName));
         TestResult = parsed switch
         {

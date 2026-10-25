@@ -14,7 +14,7 @@ public sealed class TextureLibraryScannerTests : IDisposable
     public void Scan_WithCustomPatterns_FindsTheMapsTheyDescribe()
     {
         // Arrange
-        var parser = new MapFileParser([@"^(?<map>[a-z]+)-(?<name>.+)$"], DefaultTextureNaming.MapNames);
+        var parser = new MapFileParser([new FilePattern("Test", @"^(?<map>[a-z]+)-(?<name>.+)$")], DefaultTextureNaming.MapNames);
         Touch(string.Empty, "albedo-Brick.png", "normal-Brick.png", "Brick_albedo.png");
 
         // Act
