@@ -60,7 +60,8 @@ public sealed partial class InboxViewModel : ObservableObject
         var scan = ++latestScan;
         var downloads = session.Settings.DownloadsDirectory;
         var library = session.Library;
-        var found = await Task.Run(() => scanner.Scan(downloads, library));
+        var parser = session.Parser;
+        var found = await Task.Run(() => scanner.Scan(downloads, library, parser));
         if (scan != latestScan)
         {
             // A newer scan started meanwhile, for instance after the library changed; its result counts.

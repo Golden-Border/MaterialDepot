@@ -25,7 +25,7 @@ public sealed class DownloadScannerTests : IDisposable
         Write("TCom_HeavyRust3_1K_albedo.tif", "TCom_HeavyRust3_1K_normal.tif", "TCom_Rock_CliffVolcanic_2K_albedo.tif", "TCom_Rock_CliffVolcanic_2K_ao.tif", "invoice.pdf", "photo.jpg");
 
         // Act
-        var candidates = sut.Scan(downloads, []);
+        var candidates = sut.Scan(downloads, [], MapFileParser.Default);
 
         // Assert
         candidates.Select(candidate => candidate.BaseName).ShouldBe(["TCom_HeavyRust3_1K", "TCom_Rock_CliffVolcanic_2K"]);
@@ -48,7 +48,7 @@ public sealed class DownloadScannerTests : IDisposable
         }
 
         // Act
-        var candidate = sut.Scan(downloads, []).ShouldHaveSingleItem();
+        var candidate = sut.Scan(downloads, [], MapFileParser.Default).ShouldHaveSingleItem();
 
         // Assert
         candidate.Files.Select(file => file.ZipEntry).ShouldBe(["Heavy Rust 3/TCom_HeavyRust3_1K_albedo.tif", "Heavy Rust 3/TCom_HeavyRust3_1K_ao.tif"]);
@@ -62,7 +62,7 @@ public sealed class DownloadScannerTests : IDisposable
         Write("snapshot-for-split-button-basic-1-color.png", "TCom_HeavyRust3_1K_albedo.tif");
 
         // Act & Assert
-        sut.Scan(downloads, []).ShouldBeEmpty();
+        sut.Scan(downloads, [], MapFileParser.Default).ShouldBeEmpty();
     }
 
     [Fact]
@@ -72,7 +72,7 @@ public sealed class DownloadScannerTests : IDisposable
         File.WriteAllText(Path.Combine(downloads, "half.zip"), "not a zip");
 
         // Act & Assert
-        sut.Scan(downloads, []).ShouldBeEmpty();
+        sut.Scan(downloads, [], MapFileParser.Default).ShouldBeEmpty();
     }
 
     [Fact]
@@ -87,7 +87,7 @@ public sealed class DownloadScannerTests : IDisposable
         var library = new[] { new TextureSet("Heavy Rust 3", setDirectory, new Dictionary<PbrMap, MapFile>()) };
 
         // Act
-        var candidate = sut.Scan(downloads, library).ShouldHaveSingleItem();
+        var candidate = sut.Scan(downloads, library, MapFileParser.Default).ShouldHaveSingleItem();
 
         // Assert
         candidate.LibrarySetName.ShouldBe("Heavy Rust 3");
@@ -104,7 +104,7 @@ public sealed class DownloadScannerTests : IDisposable
         var library = new[] { new TextureSet("Heavy Rust 3", setDirectory, new Dictionary<PbrMap, MapFile>()) };
 
         // Act
-        var candidate = sut.Scan(downloads, library).ShouldHaveSingleItem();
+        var candidate = sut.Scan(downloads, library, MapFileParser.Default).ShouldHaveSingleItem();
 
         // Assert
         candidate.IsInLibrary.ShouldBeFalse();

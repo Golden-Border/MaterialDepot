@@ -6,7 +6,7 @@ Material Depot is a Windows desktop tool (WPF, .NET 10, `net10.0-windows`) for P
 2. It shows the library as a grid of sets with their albedo as preview.
 3. It imports a set into a Stride project: 8-bit PNGs next to the project's other source textures, one `.sdtex` per map and a ready `.sdmat`.
 
-The sets come from textures.com (`TCom_<name>_<res>_<map>.tif`), some from Poly Haven (`<name>_<map>_<res>.<ext>`). The files are licensed downloads. **Never commit a texture from textures.com or any other store to this repo**, not even as a test fixture: tests create their images themselves.
+The sets come from textures.com (`TCom_<name>_<res>_<map>.tif`), some from Poly Haven (`<name>_<map>_<res>.<ext>`). Which files count as maps is not hard-coded: `DepotSettings` holds file name regexes (groups `name`, `map`, optional `res`; matched against the name without extension) and the map name aliases, `MapFileParser` applies them, and `DefaultTextureNaming` holds the shipped defaults that an old `settings.json` without them falls back to. The files are licensed downloads. **Never commit a texture from textures.com or any other store to this repo**, not even as a test fixture: tests create their images themselves.
 
 ## Build and Test
 

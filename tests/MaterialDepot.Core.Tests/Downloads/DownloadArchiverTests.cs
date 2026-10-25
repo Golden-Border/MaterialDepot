@@ -128,7 +128,7 @@ public sealed class DownloadArchiverTests : IDisposable
     {
         var path = Path.Combine(downloads, fileName);
         File.WriteAllBytes(path, content);
-        MapFile.TryParse(path, out var mapFile).ShouldBeTrue();
+        MapFileParser.Default.TryParse(path, out var mapFile).ShouldBeTrue();
         return new DownloadedMap(fileName, mapFile.Map, path, null, content.Length);
     }
 

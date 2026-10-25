@@ -5,7 +5,7 @@ namespace MaterialDepot.Core.Downloads;
 
 public sealed class DownloadScanner : IDownloadScanner
 {
-    public IReadOnlyList<DownloadCandidate> Scan(string downloads, IReadOnlyCollection<TextureSet> library)
+    public IReadOnlyList<DownloadCandidate> Scan(string downloads, IReadOnlyCollection<TextureSet> library, MapFileParser parser)
     {
         if (!Directory.Exists(downloads))
         {
@@ -17,9 +17,9 @@ public sealed class DownloadScanner : IDownloadScanner
         {
             if (Path.GetExtension(path).Equals(".zip", StringComparison.OrdinalIgnoreCase))
             {
-                found.AddRange(MapsInZip(path));
+                found.AddRange(MapsInZip(path, parser));
             }
-            else if (MapFile.TryParse(path, out var mapFile))
+            else if (parser.TryParse(path, out var mapFile))
             {
                 found.Add((mapFile.BaseName, new DownloadedMap(Path.GetFileName(path), mapFile.Map, path, null, new FileInfo(path).Length)));
             }
@@ -38,7 +38,7 @@ public sealed class DownloadScanner : IDownloadScanner
             })];
     }
 
-    private static IEnumerable<(string BaseName, DownloadedMap File)> MapsInZip(string zipPath)
+    private static IEnumerable<(string BaseName, DownloadedMap File)> MapsInZip(string zipPath, MapFileParser parser)
     {
         List<(string, DownloadedMap)> maps = [];
         try
@@ -46,7 +46,7 @@ public sealed class DownloadScanner : IDownloadScanner
             using var zip = ZipFile.OpenRead(zipPath);
             foreach (var entry in zip.Entries)
             {
-                if (entry.Name.Length > 0 && MapFile.TryParse(entry.Name, out var mapFile))
+                if (entry.Name.Length > 0 && parser.TryParse(entry.Name, out var mapFile))
                 {
                     maps.Add((mapFile.BaseName, new DownloadedMap(entry.Name, mapFile.Map, zipPath, entry.FullName, entry.Length)));
                 }
