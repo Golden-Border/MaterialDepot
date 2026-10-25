@@ -140,6 +140,8 @@
             <StackPanel Margin="0,16,0,0" Orientation="Horizontal">
                 <Button Style="{StaticResource PrimaryButton}" Content="Speichern" Command="{Binding SaveCommand}" />
                 <Button Margin="8,0,0,0" Content="Verwerfen" Command="{Binding ResetCommand}" />
+                <Button Margin="8,0,0,0" Content="Einrichtung …" Command="{Binding RunSetupCommand}"
+                        ToolTip="Den Einrichtungs-Assistenten noch einmal öffnen" />
                 <TextBlock Margin="12,0,0,0" VerticalAlignment="Center" Text="{Binding SavedNote}" Foreground="{StaticResource Success}" />
                 <TextBlock Margin="12,0,0,0" VerticalAlignment="Center" Text="{Binding ErrorNote}" Foreground="{StaticResource Warning}" />
             </StackPanel>

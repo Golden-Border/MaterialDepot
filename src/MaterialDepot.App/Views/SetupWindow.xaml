@@ -1,0 +1,125 @@
+<Window x:Class="MaterialDepot.App.Views.SetupWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:MaterialDepot.App.ViewModels"
+        mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance Type=vm:SetupViewModel}"
+        Title="Einrichtung" Width="680" Height="520" ResizeMode="NoResize"
+        WindowStartupLocation="CenterOwner" ShowInTaskbar="False">
+    <DockPanel Margin="18">
+        <StackPanel DockPanel.Dock="Top">
+            <TextBlock Text="Willkommen bei Material Depot" Style="{StaticResource Heading}" />
+            <TextBlock Text="{Binding StepTitle}" Style="{StaticResource Hint}" Margin="0,2,0,12" />
+        </StackPanel>
+
+        <DockPanel DockPanel.Dock="Bottom" Margin="0,14,0,0" LastChildFill="False">
+            <Button DockPanel.Dock="Left" Content="Überspringen" Command="{Binding SkipCommand}" IsCancel="True"
+                    ToolTip="Mit den Vorgaben starten; die Einrichtung lässt sich in den Einstellungen wieder öffnen" />
+            <Button DockPanel.Dock="Right" Margin="8,0,0,0" Style="{StaticResource PrimaryButton}" Content="Fertig"
+                    Command="{Binding FinishCommand}" IsDefault="True"
+                    Visibility="{Binding IsLastStep, Converter={StaticResource Presence}}" />
+            <Button DockPanel.Dock="Right" Margin="8,0,0,0" Style="{StaticResource PrimaryButton}" Content="Weiter"
+                    Command="{Binding NextCommand}" IsDefault="True"
+                    Visibility="{Binding IsLastStep, Converter={StaticResource Presence}, ConverterParameter=Invert}" />
+            <Button DockPanel.Dock="Right" Content="Zurück" Command="{Binding BackCommand}"
+                    Visibility="{Binding IsNotFirstStep, Converter={StaticResource Presence}}" />
+        </DockPanel>
+
+        <Grid>
+            <StackPanel Visibility="{Binding IsLibraryStep, Converter={StaticResource Presence}}">
+                <TextBlock TextWrapping="Wrap"
+                           Text="Die Bibliothek ist der Ordner, in dem jedes Textur-Set einen eigenen Unterordner mit den Original-Dateien bekommt." />
+                <DockPanel Margin="0,14,0,0">
+                    <Button DockPanel.Dock="Right" Margin="8,0,0,0" Content="Wählen …" Command="{Binding BrowseLibraryCommand}" />
+                    <TextBox Text="{Binding LibraryRoot, UpdateSourceTrigger=PropertyChanged}" />
+                </DockPanel>
+                <TextBlock Style="{StaticResource Hint}" Text="{Binding LibraryNote}" />
+            </StackPanel>
+
+            <StackPanel Visibility="{Binding IsDownloadsStep, Converter={StaticResource Presence}}">
+                <TextBlock TextWrapping="Wrap"
+                           Text="Hier sucht der Eingang nach neuen Sets, lose und in Zip-Dateien. Üblich ist der Download-Ordner des Browsers." />
+                <DockPanel Margin="0,14,0,0">
+                    <Button DockPanel.Dock="Right" Margin="8,0,0,0" Content="Wählen …" Command="{Binding BrowseDownloadsCommand}" />
+                    <TextBox Text="{Binding DownloadsDirectory, UpdateSourceTrigger=PropertyChanged}" />
+                </DockPanel>
+                <TextBlock Style="{StaticResource Hint}" Text="{Binding DownloadsNote}" />
+            </StackPanel>
+
+            <StackPanel Visibility="{Binding IsProjectStep, Converter={StaticResource Presence}}">
+                <TextBlock TextWrapping="Wrap"
+                           Text="Für den Import in Stride braucht Material Depot ein Projekt. Das lässt sich auch später in den Einstellungen hinzufügen." />
+                <CheckBox Margin="0,10,0,0" Content="Ein Stride-Projekt jetzt hinzufügen" IsChecked="{Binding AddProject}" />
+                <Grid Margin="0,10,0,0" IsEnabled="{Binding AddProject}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="150" />
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Grid.Resources>
+                        <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
+                            <Setter Property="Margin" Value="0,0,0,6" />
+                        </Style>
+                        <Style TargetType="TextBlock" BasedOn="{StaticResource FieldLabel}">
+                            <Setter Property="Margin" Value="0,0,12,6" />
+                        </Style>
+                    </Grid.Resources>
+                    <TextBlock Text="Projektordner" />
+                    <TextBox Grid.Column="1" Text="{Binding ProjectRootDirectory, UpdateSourceTrigger=PropertyChanged}" />
+                    <Button Grid.Column="2" Margin="8,0,0,6" Content="Wählen …" Command="{Binding BrowseProjectCommand}" />
+                    <TextBlock Grid.Row="1" Text="Name" />
+                    <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding ProjectName, UpdateSourceTrigger=PropertyChanged}" />
+                    <TextBlock Grid.Row="2" Text="Quellbilder" />
+                    <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding ProjectSourceTextureDirectory, UpdateSourceTrigger=PropertyChanged}"
+                             ToolTip="Relativ zum Projektordner; hierhin kommen die PNGs, ein Unterordner pro Set" />
+                    <TextBlock Grid.Row="3" Text="Asset-Ordner" />
+                    <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding ProjectAssetsDirectory, UpdateSourceTrigger=PropertyChanged}"
+                             ToolTip="Relativ zum Projektordner; der Assets-Ordner des Stride-Pakets" />
+                    <TextBlock Grid.Row="4" Text="Texturen (.sdtex)" />
+                    <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding ProjectTextureAssetDirectory, UpdateSourceTrigger=PropertyChanged}"
+                             ToolTip="Relativ zum Asset-Ordner" />
+                    <TextBlock Grid.Row="5" Text="Materialien (.sdmat)" />
+                    <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding ProjectMaterialDirectory, UpdateSourceTrigger=PropertyChanged}"
+                             ToolTip="Relativ zum Asset-Ordner" />
+                </Grid>
+                <TextBlock Style="{StaticResource Hint}" Foreground="{StaticResource Warning}" Text="{Binding ProjectNote}"
+                           Visibility="{Binding ProjectNote, Converter={StaticResource Presence}}" />
+            </StackPanel>
+
+            <StackPanel Visibility="{Binding IsFlowStep, Converter={StaticResource Presence}}">
+                <TextBlock TextWrapping="Wrap" Text="So arbeitest du mit Material Depot:" />
+                <ItemsControl Margin="0,10,0,0">
+                    <ItemsControl.Resources>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="TextWrapping" Value="Wrap" />
+                            <Setter Property="Margin" Value="0,0,0,10" />
+                        </Style>
+                    </ItemsControl.Resources>
+                    <TextBlock>
+                        <Run FontWeight="SemiBold" Text="1. Download erkennen: " /><Run Text="Lade ein Set herunter. Der Eingang findet neue Sets im Download-Ordner, auch in Zip-Dateien." />
+                    </TextBlock>
+                    <TextBlock>
+                        <Run FontWeight="SemiBold" Text="2. In die Bibliothek übernehmen: " /><Run Text="Die Original-Dateien wandern in einen eigenen Ordner pro Set. Die Bibliothek zeigt jedes Set mit seiner Albedo als Vorschau." />
+                    </TextBlock>
+                    <TextBlock>
+                        <Run FontWeight="SemiBold" Text="3. In Stride importieren: " /><Run Text="Ein Set lässt sich in ein Projekt übernehmen. Material Depot schreibt die PNGs, die Texturen und das fertige Material." />
+                    </TextBlock>
+                    <TextBlock>
+                        <Run FontWeight="SemiBold" Text="4. Projekt neu laden: " /><Run Text="Game Studio liest geänderte Dateien nicht von selbst neu ein. Lade das Projekt nach einem Import neu." />
+                    </TextBlock>
+                </ItemsControl>
+                <TextBlock Style="{StaticResource Hint}" Text="Die Einrichtung lässt sich jederzeit in den Einstellungen wieder öffnen." />
+            </StackPanel>
+        </Grid>
+    </DockPanel>
+</Window>

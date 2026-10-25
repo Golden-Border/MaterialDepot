@@ -18,6 +18,12 @@ public sealed class DialogService : IDialogService
         return window.ShowDialog() == true || import.Result is not null;
     }
 
+    public bool ShowSetup(SetupViewModel setup)
+    {
+        var window = new SetupWindow { DataContext = setup, Owner = Application.Current.MainWindow };
+        return window.ShowDialog() == true;
+    }
+
     public bool Confirm(string message) =>
         MessageBox.Show(Application.Current.MainWindow, message, Caption, MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes;
 

@@ -9,6 +9,8 @@ public sealed class JsonSettingsStore(string path, Func<DepotSettings> createDef
 {
     private static readonly JsonSerializerOptions options = new() { WriteIndented = true };
 
+    public bool HasSavedSettings => File.Exists(path);
+
     public DepotSettings Load()
     {
         if (!File.Exists(path))
