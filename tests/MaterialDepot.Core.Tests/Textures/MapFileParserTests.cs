@@ -59,7 +59,8 @@ public class MapFileParserTests
     [Theory]
     [InlineData("aerial_rocks_04_nor_gl_4k", "aerial_rocks_04", "nor_gl", "4k")]
     [InlineData("rock_wall_diff_8k", "rock_wall", "diff", "8k")]
-    [InlineData("TCom_HeavyRust3_1K_albedo", "TCom_HeavyRust3_1K", "albedo", null)]
+    [InlineData("Mossy Rock 01_Base Color", "Mossy Rock 01", "Base Color", null)]
+    [InlineData("TCom_HeavyRust3_1K_albedo", "TCom_HeavyRust3_1K", "albedo", "1K")]
     public void Parse_GivesTheGroupsOfTheMatchingPattern(string stem, string name, string token, string? resolution)
     {
         // Act
