@@ -8,7 +8,7 @@ using MaterialDepot.Core.Downloads;
 namespace MaterialDepot.App.ViewModels;
 
 /// <summary>
-/// The inbox tab: texture sets in the download folder, to copy or move into the library.
+/// The inbox tab: texture sets in the download folder, to copy or move into the library, or to throw away.
 /// </summary>
 public sealed partial class InboxViewModel : ObservableObject
 {
@@ -17,13 +17,21 @@ public sealed partial class InboxViewModel : ObservableObject
     private readonly IDownloadArchiver archiver;
     private readonly ThumbnailLoader thumbnails;
     private readonly IDialogService dialogs;
+    private readonly IFileRemover fileRemover;
     private int latestScan;
 
-    public InboxViewModel(DepotSession session, IDownloadScanner scanner, IDownloadArchiver archiver, ThumbnailLoader thumbnails, IDialogService dialogs)
+    public InboxViewModel(
+        DepotSession session,
+        IDownloadScanner scanner,
+        IDownloadArchiver archiver,
+        IFileRemover fileRemover,
+        ThumbnailLoader thumbnails,
+        IDialogService dialogs)
     {
         this.session = session;
         this.scanner = scanner;
         this.archiver = archiver;
+        this.fileRemover = fileRemover;
         this.thumbnails = thumbnails;
         this.dialogs = dialogs;
         session.LibraryChanged += (_, _) => _ = RescanAsync();
@@ -86,6 +94,38 @@ public sealed partial class InboxViewModel : ObservableObject
 
     [RelayCommand]
     private Task MoveAsync(DownloadCandidateViewModel item) => ArchiveAsync(item, move: true);
+
+    [RelayCommand]
+    private async Task DeleteAsync(DownloadCandidateViewModel item)
+    {
+        var sources = item.Candidate.SourceFiles.ToList();
+        var zipNote = item.Candidate.Files.Any(file => file.IsInZip)
+            ? "\n\nEin Zip landet als Ganzes im Papierkorb, auch was sonst noch darin ist."
+            : string.Empty;
+        if (!dialogs.Confirm(
+            $"„{item.BaseName}“ aus den Downloads in den Papierkorb legen?\n\n"
+            + string.Join("\n", sources.Select(Path.GetFileName))
+            + zipNote))
+        {
+            return;
+        }
+
+        IsBusy = true;
+        try
+        {
+            await Task.Run(() => sources.ForEach(fileRemover.Remove));
+            LastAction = $"{sources.Count} Downloads von „{item.BaseName}“ in den Papierkorb.";
+            await RescanAsync();
+        }
+        catch (Exception exception) when (exception is IOException or UnauthorizedAccessException or OperationCanceledException)
+        {
+            dialogs.ShowError($"Das Löschen ist fehlgeschlagen:\n{exception.Message}");
+        }
+        finally
+        {
+            IsBusy = false;
+        }
+    }
 
     private async Task ArchiveAsync(DownloadCandidateViewModel item, bool move)
     {

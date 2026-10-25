@@ -82,6 +82,11 @@
                                     Background="{StaticResource SuccessSoft}" Visibility="{Binding IsInProject, Converter={StaticResource Presence}}">
                                 <TextBlock Text="im Projekt" Foreground="{StaticResource Success}" FontSize="10.5" FontWeight="SemiBold" />
                             </Border>
+                            <Border HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="6" Padding="5,1" CornerRadius="3"
+                                    Background="#B0000000" Visibility="{Binding HasCloudOnlyMaps, Converter={StaticResource Presence}}"
+                                    ToolTip="Mindestens eine Map liegt nur in der Cloud, nicht auf diesem Rechner.">
+                                <TextBlock Text="Cloud" Foreground="White" FontSize="10.5" FontWeight="SemiBold" />
+                            </Border>
                         </Grid>
                         <TextBlock Margin="0,6,0,0" Text="{Binding Name}" FontWeight="SemiBold" TextTrimming="CharacterEllipsis" ToolTip="{Binding Name}" />
                         <TextBlock Text="{Binding Location}" Style="{StaticResource MutedText}" ToolTip="{Binding Location}" />
@@ -99,7 +104,10 @@
                            Visibility="{Binding SelectedSet, Converter={StaticResource Presence}, ConverterParameter=Invert}" />
                 <StackPanel DataContext="{Binding SelectedSet}" Visibility="{Binding Converter={StaticResource Presence}}">
                     <Border Background="{StaticResource Placeholder}" CornerRadius="4" Height="310">
-                        <Image Source="{Binding Thumbnail}" Stretch="Uniform" RenderOptions.BitmapScalingMode="HighQuality" />
+                        <Grid>
+                            <TextBlock Text="{Binding PlaceholderText}" HorizontalAlignment="Center" VerticalAlignment="Center" Style="{StaticResource MutedText}" />
+                            <Image Source="{Binding Thumbnail}" Stretch="Uniform" RenderOptions.BitmapScalingMode="HighQuality" />
+                        </Grid>
                     </Border>
                     <TextBlock Margin="0,12,0,2" Text="{Binding Name}" Style="{StaticResource Heading}" />
                     <TextBlock Text="{Binding Location}" Style="{StaticResource MutedText}" TextWrapping="Wrap" />
@@ -120,6 +128,9 @@
                     <TextBlock Margin="0,8,0,0" Style="{StaticResource Hint}"
                                Text="Für ein Material braucht das Set mindestens Albedo, Normal und Roughness."
                                Visibility="{Binding CanImport, Converter={StaticResource Presence}, ConverterParameter=Invert}" />
+                    <TextBlock Margin="0,8,0,0" Style="{StaticResource Hint}"
+                               Text="Mindestens eine Map liegt nur in der Cloud. Die Übernahme lädt sie herunter; schlägt das fehl, den Ordner im Explorer über das Kontextmenü des Sync-Clients dauerhaft lokal verfügbar machen."
+                               Visibility="{Binding HasCloudOnlyMaps, Converter={StaticResource Presence}}" />
                 </StackPanel>
             </Grid>
         </Border>

@@ -37,7 +37,7 @@
                 <Button DockPanel.Dock="Right" Content="Projekt hinzufügen" Command="{Binding AddProjectCommand}" />
             </DockPanel>
             <TextBlock Style="{StaticResource Hint}"
-                       Text="Ordner relativ zum Projektordner bzw. zum Asset-Ordner. Beispiel: Quellbilder in Assets/Textures, Assets in Game/Assets, Texturen und Materialien je in Materials." />
+                       Text="Quellbilder und Asset-Ordner relativ zum Projektordner, Texturen und Materialien relativ zum Asset-Ordner." />
             <ListBox Margin="0,6,0,0" ItemsSource="{Binding Projects}" SelectedItem="{Binding SelectedProject}"
                      DisplayMemberPath="Name" MinHeight="60" MaxHeight="140" />
 

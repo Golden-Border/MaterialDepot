@@ -2,6 +2,7 @@ using System.IO;
 using System.Windows.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using MaterialDepot.App.Services;
+using MaterialDepot.Core.Library;
 using MaterialDepot.Core.Textures;
 
 namespace MaterialDepot.App.ViewModels;
@@ -31,7 +32,13 @@ public sealed partial class TextureSetCardViewModel(TextureSet set, string libra
     /// </summary>
     public bool CanImport => Set.Maps.ContainsKey(PbrMap.Albedo) && Set.Maps.ContainsKey(PbrMap.Normal) && Set.Maps.ContainsKey(PbrMap.Roughness);
 
-    public string PlaceholderText => HasAlbedo ? "Vorschau wird erstellt …" : "kein Albedo";
+    /// <summary>
+    /// Whether one of the maps lies only in the sync client's cloud; an import would download it first.
+    /// </summary>
+    public bool HasCloudOnlyMaps { get; } = set.Maps.Values.Any(map => FileAvailability.IsCloudOnly(map.Path));
+
+    [ObservableProperty]
+    public partial string PlaceholderText { get; set; } = set.Albedo is null ? "kein Albedo" : "Vorschau wird erstellt …";
 
     [ObservableProperty]
     public partial ImageSource? Thumbnail { get; set; }
@@ -41,9 +48,22 @@ public sealed partial class TextureSetCardViewModel(TextureSet set, string libra
 
     public async Task LoadThumbnailAsync(ThumbnailLoader loader)
     {
-        if (Set.Albedo is { } albedo && Thumbnail is null)
+        if (Set.Albedo is not { } albedo || Thumbnail is not null)
         {
-            Thumbnail = await loader.LoadAsync(albedo.Path);
+            return;
+        }
+
+        // A cloud-only albedo is not read: browsing the library would otherwise download every set.
+        if (FileAvailability.IsCloudOnly(albedo.Path))
+        {
+            PlaceholderText = "Albedo nur in der Cloud";
+            return;
+        }
+
+        Thumbnail = await loader.LoadAsync(albedo.Path);
+        if (Thumbnail is null)
+        {
+            PlaceholderText = "Vorschau nicht möglich";
         }
     }
 

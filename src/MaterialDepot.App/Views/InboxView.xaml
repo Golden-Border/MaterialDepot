@@ -15,7 +15,7 @@
             <TextBlock Margin="0,8,0,0" Text="{Binding LastAction}" Foreground="{StaticResource Success}"
                        Visibility="{Binding LastAction, Converter={StaticResource Presence}}" />
             <TextBlock Margin="0,4,0,0" Style="{StaticResource Hint}"
-                       Text="Kopieren lässt die Downloads liegen, Verschieben legt sie danach in den Papierkorb. Eine Datei, die mit anderem Inhalt schon in der Bibliothek liegt, wird nie überschrieben." />
+                       Text="Kopieren lässt die Downloads liegen, Verschieben legt sie danach in den Papierkorb, Löschen legt sie ohne Kopie in den Papierkorb. Eine Datei, die mit anderem Inhalt schon in der Bibliothek liegt, wird nie überschrieben." />
         </StackPanel>
 
         <ScrollViewer VerticalScrollBarVisibility="Auto">
@@ -57,6 +57,10 @@
                                             CommandParameter="{Binding}" />
                                     <Button Margin="0,6,0,0" Content="Kopieren"
                                             Command="{Binding DataContext.CopyCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                            CommandParameter="{Binding}" />
+                                    <Button Margin="0,6,0,0" Content="Löschen"
+                                            ToolTip="Die Downloads dieses Sets in den Papierkorb legen, ohne sie in die Bibliothek zu übernehmen"
+                                            Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                             CommandParameter="{Binding}" />
                                 </StackPanel>
                             </Grid>

@@ -47,7 +47,7 @@ public sealed class ThumbnailLoader(IThumbnailCache cache)
             image.Freeze();
             return image;
         }
-        catch (Exception exception) when (exception is IOException or ImageMagick.MagickException or NotSupportedException)
+        catch (Exception exception) when (exception is IOException or UnauthorizedAccessException or ImageMagick.MagickException or NotSupportedException)
         {
             return null;
         }

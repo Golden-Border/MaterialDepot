@@ -64,12 +64,12 @@
                     <TextBlock Style="{StaticResource Hint}" Margin="0,2,0,0" Foreground="{StaticResource Accent}"
                                Text="{Binding TileSizeFromName}" Visibility="{Binding TileSizeFromName, Converter={StaticResource Presence}}" />
                     <TextBlock Style="{StaticResource Hint}"
-                           Text="Nur ausfüllen, wenn die Textur in echter Größe liegen soll; textures.com gibt sie an, 20 × 20 cm ist 0,2. Echte Größe kann aus der Spielkamera zu fein wirken: Heavy Rust 3 auf Schlüssel und Schloss sah bei 2,5 nur noch braun aus, mit 1 stimmt es." />
+                           Text="Nur ausfüllen, wenn die Textur in echter Größe liegen soll; textures.com gibt sie an, 20 × 20 cm ist 0,2. In echter Größe kann eine feine Textur aus der Spielkamera zu einer einzigen Farbe verschwimmen." />
                 </StackPanel>
                 <TextBlock Grid.Row="6" Text="Meter pro UV-Einheit" />
                 <TextBox Grid.Row="6" Grid.Column="1" Width="120" HorizontalAlignment="Left" Text="{Binding MetersPerUvUnitText, UpdateSourceTrigger=PropertyChanged}" />
                 <TextBlock Grid.Row="7" Grid.Column="1" Style="{StaticResource Hint}"
-                           Text="Wie viel Fläche eine UV-Einheit auf den Meshes abdeckt: z. B. 1 für Wände und Böden, 0,5 für kleine Props." />
+                           Text="Wie viele Meter eine UV-Einheit auf den Meshes abdeckt, für die das Material gedacht ist." />
                 <TextBlock Grid.Row="8" Text="UVScale" />
                 <TextBox Grid.Row="8" Grid.Column="1" Width="120" HorizontalAlignment="Left" Text="{Binding UvScaleText, UpdateSourceTrigger=PropertyChanged}"
                          ToolTip="Standard 1; mit einer Kachelgröße errechnet aus den beiden Feldern darüber" />
