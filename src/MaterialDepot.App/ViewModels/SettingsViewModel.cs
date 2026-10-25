@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using MaterialDepot.App.Services;
 using MaterialDepot.Core.Settings;
+using MaterialDepot.Core.Setup;
 using MaterialDepot.Core.Stride;
 
 namespace MaterialDepot.App.ViewModels;
@@ -14,10 +15,12 @@ public sealed partial class SettingsViewModel : ObservableObject
 {
     private readonly DepotSession session;
     private readonly IDialogService dialogs;
+    private readonly SetupGuide setupGuide;
 
-    public SettingsViewModel(DepotSession session, IDialogService dialogs)
+    public SettingsViewModel(DepotSession session, SetupGuide setupGuide, IDialogService dialogs)
     {
         this.session = session;
+        this.setupGuide = setupGuide;
         this.dialogs = dialogs;
         Reset();
     }
@@ -71,6 +74,16 @@ public sealed partial class SettingsViewModel : ObservableObject
         SavedNote = "Gespeichert.";
         if (libraryChanged)
         {
+            await session.RescanLibraryAsync();
+        }
+    }
+
+    [RelayCommand]
+    private async Task RunSetupAsync()
+    {
+        if (dialogs.ShowSetup(new SetupViewModel(session, setupGuide, dialogs)))
+        {
+            Reset();
             await session.RescanLibraryAsync();
         }
     }

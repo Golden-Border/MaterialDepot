@@ -6,6 +6,7 @@ using MaterialDepot.Core.Downloads;
 using MaterialDepot.Core.Imaging;
 using MaterialDepot.Core.Library;
 using MaterialDepot.Core.Settings;
+using MaterialDepot.Core.Setup;
 using MaterialDepot.Core.Stride;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -50,6 +51,7 @@ public partial class App : Application
         services.AddSingleton<IStrideProjectInventory, StrideProjectInventory>();
         services.AddSingleton<IStrideMaterialImporter, StrideMaterialImporter>();
 
+        services.AddSingleton<SetupGuide>();
         services.AddSingleton<DepotSession>();
         services.AddSingleton<ThumbnailLoader>();
         services.AddSingleton<IDialogService, DialogService>();

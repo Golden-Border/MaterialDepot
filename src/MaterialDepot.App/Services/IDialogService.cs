@@ -12,6 +12,11 @@ public interface IDialogService
     /// </summary>
     bool ShowImport(ImportViewModel import);
 
+    /// <summary>
+    /// Shows the setup guide; <see langword="true"/> when it saved the settings, <see langword="false"/> when it was skipped or closed.
+    /// </summary>
+    bool ShowSetup(SetupViewModel setup);
+
     bool Confirm(string message);
 
     void ShowError(string message);
