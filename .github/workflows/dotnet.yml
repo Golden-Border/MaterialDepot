@@ -7,6 +7,14 @@ on:
     types: [opened, synchronize, reopened, ready_for_review]
     branches: ["main", "develop"]
 
+permissions:
+  contents: read
+
+# A newer push to the same PR cancels the older run; pushes to main/develop always run to the end.
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
 jobs:
   build:
     # WPF needs the Windows desktop targeting pack, and Magick.NET's native library is tested on the same OS the app runs on.
@@ -18,9 +26,22 @@ jobs:
       uses: actions/setup-dotnet@v4
       with:
         dotnet-version: 10.0.x
+    - name: Cache NuGet packages
+      uses: actions/cache@v4
+      with:
+        path: ~/.nuget/packages
+        key: nuget-${{ runner.os }}-${{ hashFiles('Directory.Packages.props', '**/*.csproj') }}
+        restore-keys: nuget-${{ runner.os }}-
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
       run: dotnet build --no-restore
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test --no-build --verbosity normal --logger "trx;LogFileName=test-results.trx" --results-directory TestResults
+    - name: Upload test results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-results
+        path: TestResults/*.trx
+        if-no-files-found: ignore
