@@ -175,7 +175,7 @@ public sealed class StrideMaterialImporterTests : IDisposable
         {
             var token = map == PbrMap.AmbientOcclusion ? "ao" : map.ToString().ToLowerInvariant();
             var path = TestImages.WriteTiff(Path.Combine(directory, $"TCom_HeavyRust3_1K_{token}.tif"), depth: depth);
-            MapFile.TryParse(path, out var mapFile).ShouldBeTrue();
+            MapFileParser.Default.TryParse(path, out var mapFile).ShouldBeTrue();
             files[map] = mapFile;
         }
 

@@ -32,6 +32,63 @@
             </Grid>
 
             <DockPanel Margin="0,18,0,0" LastChildFill="False">
+                <TextBlock DockPanel.Dock="Left" Text="Dateinamen" Style="{StaticResource Heading}" />
+                <Button DockPanel.Dock="Right" Margin="8,0,0,0" Content="Standard wiederherstellen" Command="{Binding RestoreDefaultNamingCommand}" />
+                <Button DockPanel.Dock="Right" Content="Muster hinzufügen" Command="{Binding AddPatternCommand}" />
+            </DockPanel>
+            <TextBlock Style="{StaticResource Hint}" TextWrapping="Wrap"
+                       Text="Reguläre Ausdrücke, die auf den Dateinamen ohne Endung passen, ohne Beachtung der Groß- und Kleinschreibung; das erste passende Muster gilt. Pflicht sind die benannten Gruppen (?&lt;name&gt;…) für das Set und (?&lt;map&gt;…) für die Map, optional (?&lt;res&gt;…) für die Auflösung." />
+            <ItemsControl Margin="0,6,0,0" ItemsSource="{Binding Patterns}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Margin="0,0,0,6">
+                            <DockPanel LastChildFill="True">
+                                <Button DockPanel.Dock="Right" Margin="8,0,0,0" Content="Entfernen"
+                                        Command="{Binding DataContext.RemovePatternCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                        CommandParameter="{Binding}" />
+                                <TextBox DockPanel.Dock="Left" Width="200" Margin="0,0,8,0" ToolTip="Name des Musters" Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" />
+                                <TextBox FontFamily="Consolas" Text="{Binding Text, UpdateSourceTrigger=PropertyChanged}" />
+                            </DockPanel>
+                            <TextBlock Foreground="{StaticResource Warning}" TextWrapping="Wrap" Text="{Binding Error}"
+                                       Visibility="{Binding Error, Converter={StaticResource Presence}}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <TextBlock Margin="0,10,0,0" Text="Namen der Maps" Style="{StaticResource FieldLabel}" />
+            <TextBlock Style="{StaticResource Hint}" TextWrapping="Wrap"
+                       Text="Wie die Map in Dateinamen heißt, durch Komma getrennt. Groß- und Kleinschreibung, Leerzeichen, Binde- und Unterstriche zählen nicht." />
+            <ItemsControl Margin="0,6,0,0" ItemsSource="{Binding MapNames}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Margin="0,0,0,6">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="160" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Text="{Binding Label}" Style="{StaticResource FieldLabel}" />
+                            <TextBox Grid.Column="1" Text="{Binding Text, UpdateSourceTrigger=PropertyChanged}" />
+                        </Grid>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <Grid Margin="0,6,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="160" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <TextBlock Text="Dateiname testen" Style="{StaticResource FieldLabel}" />
+                <TextBox Grid.Column="1" Text="{Binding TestFileName, UpdateSourceTrigger=PropertyChanged}" />
+                <TextBlock Grid.Row="1" Grid.Column="1" Margin="0,4,0,0" TextWrapping="Wrap" Text="{Binding TestResult}" />
+            </Grid>
+
+            <DockPanel Margin="0,18,0,0" LastChildFill="False">
                 <TextBlock DockPanel.Dock="Left" Text="Stride-Projekte" Style="{StaticResource Heading}" />
                 <Button DockPanel.Dock="Right" Margin="8,0,0,0" Content="Entfernen" Command="{Binding RemoveProjectCommand}" />
                 <Button DockPanel.Dock="Right" Content="Projekt hinzufügen" Command="{Binding AddProjectCommand}" />
@@ -84,6 +141,7 @@
                 <Button Style="{StaticResource PrimaryButton}" Content="Speichern" Command="{Binding SaveCommand}" />
                 <Button Margin="8,0,0,0" Content="Verwerfen" Command="{Binding ResetCommand}" />
                 <TextBlock Margin="12,0,0,0" VerticalAlignment="Center" Text="{Binding SavedNote}" Foreground="{StaticResource Success}" />
+                <TextBlock Margin="12,0,0,0" VerticalAlignment="Center" Text="{Binding ErrorNote}" Foreground="{StaticResource Warning}" />
             </StackPanel>
         </StackPanel>
     </ScrollViewer>

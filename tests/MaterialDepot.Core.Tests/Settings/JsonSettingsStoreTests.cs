@@ -1,5 +1,6 @@
 using MaterialDepot.Core.Settings;
 using MaterialDepot.Core.Stride;
+using MaterialDepot.Core.Textures;
 
 namespace MaterialDepot.Core.Tests.Settings;
 
@@ -39,6 +40,52 @@ public sealed class JsonSettingsStoreTests : IDisposable
         loaded.LibraryRoot.ShouldBe("D:/Textures");
         loaded.DownloadsDirectory.ShouldBe("D:/Downloads");
         loaded.Projects.ShouldHaveSingleItem().ShouldBe(project);
+    }
+
+    [Fact]
+    public void Load_SettingsFromBeforeThePatternsExisted_GivesTheDefaultPatternsAndMapNames()
+    {
+        // Arrange
+        Directory.CreateDirectory(temp.Combine("MaterialDepot"));
+        File.WriteAllText(temp.Combine("MaterialDepot", "settings.json"), """{ "LibraryRoot": "D:/Textures", "DownloadsDirectory": "D:/Downloads", "Projects": [] }""");
+
+        // Act
+        var loaded = sut.Load();
+
+        // Assert
+        loaded.LibraryRoot.ShouldBe("D:/Textures");
+        loaded.FilePatterns.ShouldBe(DefaultTextureNaming.FilePatterns);
+        loaded.MapNames.ShouldBe(DefaultTextureNaming.MapNames);
+    }
+
+    [Fact]
+    public void Load_AfterSave_GivesTheSavedPatternsAndMapNames()
+    {
+        // Arrange
+        var mapNames = new Dictionary<PbrMap, IReadOnlyList<string>> { [PbrMap.Albedo] = ["col", "base"], [PbrMap.Normal] = ["nrm"] };
+        var settings = new DepotSettings("D:/Textures", "D:/Downloads", [], [new FilePattern("Test", @"^(?<name>.+)\.(?<map>[a-z]+)$")], mapNames);
+
+        // Act
+        sut.Save(settings);
+        var loaded = sut.Load();
+
+        // Assert
+        loaded.FilePatterns.ShouldBe([new FilePattern("Test", @"^(?<name>.+)\.(?<map>[a-z]+)$")]);
+        loaded.MapNames[PbrMap.Albedo].ShouldBe(["col", "base"]);
+        loaded.MapNames[PbrMap.Normal].ShouldBe(["nrm"]);
+    }
+
+    [Fact]
+    public void CreateParser_WithDefaultSettings_RecognisesTexturesComAndPolyHavenNames()
+    {
+        // Arrange
+        var parser = new DepotSettings("D:/Textures", "D:/Downloads", []).CreateParser();
+
+        // Act & Assert
+        parser.TryParse("TCom_HeavyRust3_1K_albedo.tif", out var texturesCom).ShouldBeTrue();
+        texturesCom.BaseName.ShouldBe("TCom_HeavyRust3_1K");
+        parser.TryParse("aerial_rocks_04_nor_gl_4k.png", out var polyHaven).ShouldBeTrue();
+        polyHaven.Map.ShouldBe(PbrMap.Normal);
     }
 
     [Fact]

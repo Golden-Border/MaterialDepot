@@ -7,7 +7,7 @@ public sealed class TextureLibraryScanner : ITextureLibraryScanner
     // When a set lies in a folder both as the downloaded TIFF and as a converted copy, the TIFF is the original.
     private static readonly string[] extensionPreference = [".tif", ".tiff", ".png", ".jpg", ".jpeg"];
 
-    public IReadOnlyList<TextureSet> Scan(string root)
+    public IReadOnlyList<TextureSet> Scan(string root, MapFileParser parser)
     {
         if (!Directory.Exists(root))
         {
@@ -18,16 +18,16 @@ public sealed class TextureLibraryScanner : ITextureLibraryScanner
         var sets = new List<TextureSet>();
         foreach (var directory in Directory.EnumerateDirectories(fullRoot, "*", SearchOption.AllDirectories).Prepend(fullRoot))
         {
-            sets.AddRange(SetsIn(directory, isRoot: directory == fullRoot));
+            sets.AddRange(SetsIn(directory, isRoot: directory == fullRoot, parser));
         }
 
         return [.. sets.OrderBy(set => set.Name, StringComparer.CurrentCultureIgnoreCase)];
     }
 
-    private static IEnumerable<TextureSet> SetsIn(string directory, bool isRoot)
+    private static IEnumerable<TextureSet> SetsIn(string directory, bool isRoot, MapFileParser parser)
     {
         var byBase = Directory.EnumerateFiles(directory)
-            .Select(path => MapFile.TryParse(path, out var mapFile) ? mapFile : null)
+            .Select(path => parser.TryParse(path, out var mapFile) ? mapFile : null)
             .OfType<MapFile>()
             .GroupBy(mapFile => mapFile.BaseName, StringComparer.OrdinalIgnoreCase)
             .ToDictionary(group => group.Key, group => PreferredPerMap(group), StringComparer.OrdinalIgnoreCase);
