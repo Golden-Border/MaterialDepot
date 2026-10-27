@@ -76,6 +76,34 @@ public sealed class JsonSettingsStoreTests : IDisposable
     }
 
     [Fact]
+    public void Load_AfterSave_GivesTheSavedLanguage()
+    {
+        // Arrange
+        var settings = new DepotSettings("D:/Textures", "D:/Downloads", [], language: "de");
+
+        // Act
+        sut.Save(settings);
+        var loaded = sut.Load();
+
+        // Assert
+        loaded.Language.ShouldBe("de");
+    }
+
+    [Fact]
+    public void Load_SettingsFromBeforeTheLanguageExisted_FollowsWindows()
+    {
+        // Arrange
+        Directory.CreateDirectory(temp.Combine("MaterialDepot"));
+        File.WriteAllText(temp.Combine("MaterialDepot", "settings.json"), """{ "LibraryRoot": "D:/Textures", "DownloadsDirectory": "D:/Downloads", "Projects": [] }""");
+
+        // Act
+        var loaded = sut.Load();
+
+        // Assert
+        loaded.Language.ShouldBeNull();
+    }
+
+    [Fact]
     public void CreateParser_WithDefaultSettings_RecognisesTexturesComAndPolyHavenNames()
     {
         // Arrange

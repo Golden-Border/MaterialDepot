@@ -3,10 +3,11 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:res="clr-namespace:MaterialDepot.App.Resources"
         xmlns:vm="clr-namespace:MaterialDepot.App.ViewModels"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance Type=vm:ImportViewModel}"
-        Title="In Projekt übernehmen" Width="720" SizeToContent="Height" ResizeMode="NoResize"
+        Title="{x:Static res:Strings.Import_Title}" Width="720" SizeToContent="Height" ResizeMode="NoResize"
         WindowStartupLocation="CenterOwner" ShowInTaskbar="False">
     <StackPanel Margin="18">
         <Grid>
@@ -49,33 +50,33 @@
                     <Run Text="{Binding Set.Name, Mode=OneWay}" /><Run Text=" → " Foreground="{StaticResource Muted}" /><Run Text="{Binding Project.Name, Mode=OneWay}" />
                 </TextBlock>
 
-                <TextBlock Grid.Row="1" Text="Materialname" />
+                <TextBlock Grid.Row="1" Text="{x:Static res:Strings.Import_MaterialName}" />
                 <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding MaterialName, UpdateSourceTrigger=PropertyChanged}" />
-                <TextBlock Grid.Row="2" Text="Material-Ordner" />
+                <TextBlock Grid.Row="2" Text="{x:Static res:Strings.Import_MaterialFolder}" />
                 <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding MaterialDirectory, UpdateSourceTrigger=PropertyChanged}"
-                         ToolTip="Relativ zum Asset-Ordner des Projekts" />
-                <TextBlock Grid.Row="3" Text="Texturordner" />
+                         ToolTip="{x:Static res:Strings.Import_MaterialFolderToolTip}" />
+                <TextBlock Grid.Row="3" Text="{x:Static res:Strings.Import_TextureFolder}" />
                 <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding TextureFolderName, UpdateSourceTrigger=PropertyChanged}"
-                         ToolTip="Unterordner für die PNGs und die .sdtex; üblich ist der Produktname des Sets" />
+                         ToolTip="{x:Static res:Strings.Import_TextureFolderToolTip}" />
 
-                <TextBlock Grid.Row="4" Text="Kachelgröße (m, optional)" />
+                <TextBlock Grid.Row="4" Text="{x:Static res:Strings.Import_TileSize}" />
                 <TextBox Grid.Row="4" Grid.Column="1" Width="120" HorizontalAlignment="Left" Text="{Binding TileSizeText, UpdateSourceTrigger=PropertyChanged}" />
                 <StackPanel Grid.Row="5" Grid.Column="1">
                     <TextBlock Style="{StaticResource Hint}" Margin="0,2,0,0" Foreground="{StaticResource Accent}"
                                Text="{Binding TileSizeFromName}" Visibility="{Binding TileSizeFromName, Converter={StaticResource Presence}}" />
                     <TextBlock Style="{StaticResource Hint}"
-                           Text="Nur ausfüllen, wenn die Textur in echter Größe liegen soll; textures.com gibt sie an, 20 × 20 cm ist 0,2. In echter Größe kann eine feine Textur aus der Spielkamera zu einer einzigen Farbe verschwimmen." />
+                           Text="{x:Static res:Strings.Import_TileSizeHint}" />
                 </StackPanel>
-                <TextBlock Grid.Row="6" Text="Meter pro UV-Einheit" />
+                <TextBlock Grid.Row="6" Text="{x:Static res:Strings.Import_MetersPerUvUnit}" />
                 <TextBox Grid.Row="6" Grid.Column="1" Width="120" HorizontalAlignment="Left" Text="{Binding MetersPerUvUnitText, UpdateSourceTrigger=PropertyChanged}" />
                 <TextBlock Grid.Row="7" Grid.Column="1" Style="{StaticResource Hint}"
-                           Text="Wie viele Meter eine UV-Einheit auf den Meshes abdeckt, für die das Material gedacht ist." />
+                           Text="{x:Static res:Strings.Import_MetersPerUvUnitHint}" />
                 <TextBlock Grid.Row="8" Text="UVScale" />
                 <TextBox Grid.Row="8" Grid.Column="1" Width="120" HorizontalAlignment="Left" Text="{Binding UvScaleText, UpdateSourceTrigger=PropertyChanged}"
-                         ToolTip="Standard 1; mit einer Kachelgröße errechnet aus den beiden Feldern darüber" />
-                <TextBlock Grid.Row="9" Text="Material-Id (optional)" />
+                         ToolTip="{x:Static res:Strings.Import_UvScaleToolTip}" />
+                <TextBlock Grid.Row="9" Text="{x:Static res:Strings.Import_MaterialId}" />
                 <TextBox Grid.Row="9" Grid.Column="1" Text="{Binding MaterialIdText, UpdateSourceTrigger=PropertyChanged}"
-                         ToolTip="Nur nötig, wenn Modelle schon eine Material-Id erwarten, die es noch nicht gibt" />
+                         ToolTip="{x:Static res:Strings.Import_MaterialIdToolTip}" />
                 <TextBlock Grid.Row="10" Grid.Column="1" Style="{StaticResource Hint}" Foreground="{StaticResource Warning}"
                            Text="{Binding MaterialNote}" Visibility="{Binding MaterialNote, Converter={StaticResource Presence}}" />
             </Grid>
@@ -85,7 +86,7 @@
                 Visibility="{Binding Result, Converter={StaticResource Presence}}">
             <StackPanel>
                 <TextBlock Foreground="{StaticResource Success}" FontWeight="SemiBold" TextWrapping="Wrap">
-                    <Run Text="Fertig. Game Studio liest geänderte Dateien nicht von selbst neu ein: Projekt neu laden." />
+                    <Run Text="{x:Static res:Strings.Import_Done}" />
                 </TextBlock>
                 <ItemsControl Margin="0,6,0,0" ItemsSource="{Binding Result.WrittenFiles}">
                     <ItemsControl.ItemTemplate>
@@ -98,10 +99,10 @@
         </Border>
 
         <StackPanel Margin="0,14,0,0" Orientation="Horizontal" HorizontalAlignment="Right">
-            <TextBlock Margin="0,0,12,0" VerticalAlignment="Center" Text="Wird übernommen …" Style="{StaticResource MutedText}"
+            <TextBlock Margin="0,0,12,0" VerticalAlignment="Center" Text="{x:Static res:Strings.Import_Importing}" Style="{StaticResource MutedText}"
                        Visibility="{Binding IsImporting, Converter={StaticResource Presence}}" />
-            <Button Style="{StaticResource PrimaryButton}" Content="Übernehmen" Command="{Binding ImportCommand}" IsDefault="True" />
-            <Button Margin="8,0,0,0" Content="Schließen" Command="{Binding CloseCommand}" IsCancel="True" />
+            <Button Style="{StaticResource PrimaryButton}" Content="{x:Static res:Strings.Import_Import}" Command="{Binding ImportCommand}" IsDefault="True" />
+            <Button Margin="8,0,0,0" Content="{x:Static res:Strings.Common_Close}" Command="{Binding CloseCommand}" IsCancel="True" />
         </StackPanel>
     </StackPanel>
 </Window>

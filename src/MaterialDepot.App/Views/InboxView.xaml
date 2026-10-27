@@ -3,19 +3,20 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:res="clr-namespace:MaterialDepot.App.Resources"
              xmlns:vm="clr-namespace:MaterialDepot.App.ViewModels"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance Type=vm:InboxViewModel}">
     <DockPanel Margin="4,10,4,4">
         <StackPanel DockPanel.Dock="Top" Margin="0,0,0,10">
             <DockPanel LastChildFill="False">
-                <Button DockPanel.Dock="Left" Content="Downloads neu einlesen" Command="{Binding RescanCommand}" />
+                <Button DockPanel.Dock="Left" Content="{x:Static res:Strings.Inbox_Rescan}" Command="{Binding RescanCommand}" />
                 <TextBlock DockPanel.Dock="Left" Margin="14,0,0,0" Text="{Binding Summary}" VerticalAlignment="Center" Style="{StaticResource MutedText}" FontSize="12.5" />
             </DockPanel>
             <TextBlock Margin="0,8,0,0" Text="{Binding LastAction}" Foreground="{StaticResource Success}"
                        Visibility="{Binding LastAction, Converter={StaticResource Presence}}" />
             <TextBlock Margin="0,4,0,0" Style="{StaticResource Hint}"
-                       Text="Kopieren lässt die Downloads liegen, Verschieben legt sie danach in den Papierkorb, Löschen legt sie ohne Kopie in den Papierkorb. Eine Datei, die mit anderem Inhalt schon in der Bibliothek liegt, wird nie überschrieben." />
+                       Text="{x:Static res:Strings.Inbox_Hint}" />
         </StackPanel>
 
         <ScrollViewer VerticalScrollBarVisibility="Auto">
@@ -46,20 +47,20 @@
                                     </StackPanel>
                                     <ItemsControl Margin="0,6,0,0" ItemsSource="{Binding Maps}" ItemTemplate="{StaticResource MapChip}" ItemsPanel="{StaticResource ChipPanel}" />
                                     <StackPanel Orientation="Horizontal" Margin="0,6,0,0">
-                                        <TextBlock Text="Set-Name" Style="{StaticResource FieldLabel}" />
+                                        <TextBlock Text="{x:Static res:Strings.Inbox_SetName}" Style="{StaticResource FieldLabel}" />
                                         <TextBox Width="300" Text="{Binding SetName, UpdateSourceTrigger=PropertyChanged}"
-                                                 ToolTip="Ordner in der Bibliothek; am besten der Produktname von textures.com" />
+                                                 ToolTip="{x:Static res:Strings.Inbox_SetNameToolTip}" />
                                     </StackPanel>
                                 </StackPanel>
                                 <StackPanel Grid.Column="2" VerticalAlignment="Center">
-                                    <Button Style="{StaticResource PrimaryButton}" Content="Verschieben"
+                                    <Button Style="{StaticResource PrimaryButton}" Content="{x:Static res:Strings.Inbox_Move}"
                                             Command="{Binding DataContext.MoveCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                             CommandParameter="{Binding}" />
-                                    <Button Margin="0,6,0,0" Content="Kopieren"
+                                    <Button Margin="0,6,0,0" Content="{x:Static res:Strings.Inbox_Copy}"
                                             Command="{Binding DataContext.CopyCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                             CommandParameter="{Binding}" />
-                                    <Button Margin="0,6,0,0" Content="Löschen"
-                                            ToolTip="Die Downloads dieses Sets in den Papierkorb legen, ohne sie in die Bibliothek zu übernehmen"
+                                    <Button Margin="0,6,0,0" Content="{x:Static res:Strings.Inbox_Delete}"
+                                            ToolTip="{x:Static res:Strings.Inbox_DeleteToolTip}"
                                             Command="{Binding DataContext.DeleteCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
                                             CommandParameter="{Binding}" />
                                 </StackPanel>

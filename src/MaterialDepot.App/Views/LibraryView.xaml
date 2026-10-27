@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:res="clr-namespace:MaterialDepot.App.Resources"
              xmlns:vm="clr-namespace:MaterialDepot.App.ViewModels"
              mc:Ignorable="d"
              d:DataContext="{d:DesignInstance Type=vm:LibraryViewModel}">
@@ -17,11 +18,11 @@
         </Grid.ColumnDefinitions>
 
         <DockPanel Grid.ColumnSpan="2" Margin="0,0,0,10" LastChildFill="False">
-            <TextBlock DockPanel.Dock="Left" Text="Suche" Style="{StaticResource FieldLabel}" />
+            <TextBlock DockPanel.Dock="Left" Text="{x:Static res:Strings.Library_Search}" Style="{StaticResource FieldLabel}" />
             <TextBox DockPanel.Dock="Left" Width="260" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
-            <TextBlock DockPanel.Dock="Left" Text="Projekt" Margin="20,0,12,0" VerticalAlignment="Center" />
+            <TextBlock DockPanel.Dock="Left" Text="{x:Static res:Strings.Library_Project}" Margin="20,0,12,0" VerticalAlignment="Center" />
             <ComboBox DockPanel.Dock="Left" Width="180" ItemsSource="{Binding Projects}" SelectedItem="{Binding SelectedProject}" DisplayMemberPath="Name" />
-            <Button DockPanel.Dock="Left" Margin="12,0,0,0" Content="Neu einlesen" Command="{Binding RescanCommand}" />
+            <Button DockPanel.Dock="Left" Margin="12,0,0,0" Content="{x:Static res:Strings.Library_Rescan}" Command="{Binding RescanCommand}" />
             <TextBlock DockPanel.Dock="Right" Text="{Binding Summary}" Style="{StaticResource MutedText}" FontSize="12.5" VerticalAlignment="Center" />
         </DockPanel>
 
@@ -80,12 +81,12 @@
                             </Border>
                             <Border HorizontalAlignment="Right" VerticalAlignment="Top" Margin="6" Padding="5,1" CornerRadius="3"
                                     Background="{StaticResource SuccessSoft}" Visibility="{Binding IsInProject, Converter={StaticResource Presence}}">
-                                <TextBlock Text="im Projekt" Foreground="{StaticResource Success}" FontSize="10.5" FontWeight="SemiBold" />
+                                <TextBlock Text="{x:Static res:Strings.Library_InProject}" Foreground="{StaticResource Success}" FontSize="10.5" FontWeight="SemiBold" />
                             </Border>
                             <Border HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="6" Padding="5,1" CornerRadius="3"
                                     Background="#B0000000" Visibility="{Binding HasCloudOnlyMaps, Converter={StaticResource Presence}}"
-                                    ToolTip="Mindestens eine Map liegt nur in der Cloud, nicht auf diesem Rechner.">
-                                <TextBlock Text="Cloud" Foreground="White" FontSize="10.5" FontWeight="SemiBold" />
+                                    ToolTip="{x:Static res:Strings.Library_CloudToolTip}">
+                                <TextBlock Text="{x:Static res:Strings.Library_CloudBadge}" Foreground="White" FontSize="10.5" FontWeight="SemiBold" />
                             </Border>
                         </Grid>
                         <TextBlock Margin="0,6,0,0" Text="{Binding Name}" FontWeight="SemiBold" TextTrimming="CharacterEllipsis" ToolTip="{Binding Name}" />
@@ -99,7 +100,7 @@
         <Border Grid.Row="1" Grid.Column="1" Margin="6,0,0,0" Background="{StaticResource CardBackground}"
                 BorderBrush="{StaticResource CardBorder}" BorderThickness="1" CornerRadius="6" Padding="14">
             <Grid>
-                <TextBlock Text="Ein Set auswählen, um es anzusehen oder in ein Projekt zu übernehmen."
+                <TextBlock Text="{x:Static res:Strings.Library_NoSelection}"
                            TextWrapping="Wrap" Style="{StaticResource Hint}"
                            Visibility="{Binding SelectedSet, Converter={StaticResource Presence}, ConverterParameter=Invert}" />
                 <StackPanel DataContext="{Binding SelectedSet}" Visibility="{Binding Converter={StaticResource Presence}}">
@@ -120,16 +121,16 @@
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
                     <StackPanel Margin="0,16,0,0" Orientation="Horizontal">
-                        <Button Style="{StaticResource PrimaryButton}" Content="In Projekt übernehmen …" AutomationProperties.AutomationId="ImportButton"
+                        <Button Style="{StaticResource PrimaryButton}" Content="{x:Static res:Strings.Library_Import}" AutomationProperties.AutomationId="ImportButton"
                                 Command="{Binding DataContext.ImportCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" />
-                        <Button Margin="8,0,0,0" Content="Ordner öffnen"
+                        <Button Margin="8,0,0,0" Content="{x:Static res:Strings.Library_OpenFolder}"
                                 Command="{Binding DataContext.OpenFolderCommand, RelativeSource={RelativeSource AncestorType=UserControl}}" />
                     </StackPanel>
                     <TextBlock Margin="0,8,0,0" Style="{StaticResource Hint}"
-                               Text="Für ein Material braucht das Set mindestens Albedo, Normal und Roughness."
+                               Text="{x:Static res:Strings.Library_MissingMaps}"
                                Visibility="{Binding CanImport, Converter={StaticResource Presence}, ConverterParameter=Invert}" />
                     <TextBlock Margin="0,8,0,0" Style="{StaticResource Hint}"
-                               Text="Mindestens eine Map liegt nur in der Cloud. Die Übernahme lädt sie herunter; schlägt das fehl, den Ordner im Explorer über das Kontextmenü des Sync-Clients dauerhaft lokal verfügbar machen."
+                               Text="{x:Static res:Strings.Library_CloudHint}"
                                Visibility="{Binding HasCloudOnlyMaps, Converter={StaticResource Presence}}" />
                 </StackPanel>
             </Grid>

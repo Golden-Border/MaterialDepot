@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.IO;
 using System.Windows;
 using MaterialDepot.App.Services;
@@ -20,6 +21,7 @@ public partial class App : Application
     {
         base.OnStartup(e);
         services = ConfigureServices().BuildServiceProvider();
+        services.GetRequiredService<AppLanguage>().Apply(services.GetRequiredService<DepotSession>().Settings.Language);
 
         var viewModel = services.GetRequiredService<MainViewModel>();
         var window = new MainWindow { DataContext = viewModel };
@@ -51,6 +53,7 @@ public partial class App : Application
         services.AddSingleton<IStrideProjectInventory, StrideProjectInventory>();
         services.AddSingleton<IStrideMaterialImporter, StrideMaterialImporter>();
 
+        services.AddSingleton(new AppLanguage(CultureInfo.CurrentUICulture));
         services.AddSingleton<SetupGuide>();
         services.AddSingleton<DepotSession>();
         services.AddSingleton<ThumbnailLoader>();

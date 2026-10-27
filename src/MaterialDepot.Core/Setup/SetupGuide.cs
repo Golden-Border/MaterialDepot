@@ -15,7 +15,7 @@ public sealed class SetupGuide(ISettingsStore settingsStore)
 
     /// <summary>
     /// The current settings with the chosen folders and the optional project; creates the library folder when it is missing.
-    /// A project with the same folder as an existing one replaces it.
+    /// A project with the same folder as an existing one replaces it. The file names and the language stay as they are.
     /// </summary>
     public DepotSettings Apply(DepotSettings current, string libraryRoot, string downloadsDirectory, StrideProject? project)
     {
@@ -36,7 +36,7 @@ public sealed class SetupGuide(ISettingsStore settingsStore)
             projects.Add(added);
         }
 
-        return new DepotSettings(library, downloadsDirectory.Trim(), projects);
+        return new DepotSettings(library, downloadsDirectory.Trim(), projects, current.FilePatterns, current.MapNames, current.Language);
     }
 
     private static bool SameFolder(string left, string right) =>

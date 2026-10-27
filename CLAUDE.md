@@ -25,7 +25,10 @@ dotnet test ./MaterialDepot.slnx --no-build
 
 - C# conventions: `.editorconfig` plus `Directory.Build.props` (`TreatWarningsAsErrors`, `EnforceCodeStyleInBuild`) make style violations build errors. Private fields are `camelCase` without underscore.
 - Tests: AAA with `// Arrange` / `// Act` / `// Assert`, the SUT and mocks as `private readonly` fields set in the constructor.
-- Code, comments and commits in English; the UI text is German.
+- Code, comments and commits in English.
+- UI text lives in `src/MaterialDepot.App/Resources/Strings.resx` (English, also the fallback) and `Strings.de.resx` (German), never as a literal in XAML or a view model: XAML uses `{x:Static res:Strings.Key}`, code `Strings.Key` or `string.Format(Strings.Key, …)`. The `Strings` class is generated into `obj` on every build. A new key goes into both files; a test checks that keys and placeholders match. A new language needs a `Strings.<lang>.resx`, an entry in `UiLanguages.Supported` and in `SatelliteResourceLanguages`.
+- The UI language comes from the settings (`DepotSettings.Language`, `null` follows Windows), else from Windows, else English (`UiLanguages.Resolve`). It is applied at startup before the first window; a change takes effect after a restart.
+- Core returns problems as enums (`ProjectProblem`, `PatternProblem`), not as text; the app turns them into localized messages.
 - Conventional Commits, `type: short summary`, max 50 characters.
 
 ## The Stride import

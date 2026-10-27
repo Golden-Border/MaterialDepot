@@ -24,4 +24,9 @@ public interface IDialogService
     void OpenFolder(string path);
 
     string? PickFolder(string? initialDirectory);
+
+    /// <summary>
+    /// Starts the app anew and closes this instance, so a changed language applies.
+    /// </summary>
+    void Restart();
 }

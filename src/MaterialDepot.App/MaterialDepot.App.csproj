@@ -4,6 +4,9 @@
     <TargetFramework>net10.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
     <ApplicationIcon>Assets\MaterialDepot.ico</ApplicationIcon>
+    <!-- English is in Strings.resx and the fallback for every language without a translation. -->
+    <NeutralLanguage>en</NeutralLanguage>
+    <SatelliteResourceLanguages>de</SatelliteResourceLanguages>
   </PropertyGroup>
 
   <ItemGroup>
@@ -18,4 +21,26 @@
   <ItemGroup>
     <ProjectReference Include="../MaterialDepot.Core/MaterialDepot.Core.csproj" />
   </ItemGroup>
+
+  <!--
+    The Strings class for Resources/Strings.resx is generated into obj on every build, for code and for XAML
+    ({x:Static res:Strings.Key}). The usual StronglyTypedFileName metadata comes too late: WPF compiles the XAML
+    against a temporary copy of this project (*_wpftmp) that never runs ResGen, so the class is generated here,
+    before the markup compiler and before every CoreCompile. Embedding the resources stays with ResGen.
+  -->
+  <Target Name="GenerateStringsClass" BeforeTargets="MarkupCompilePass1;CoreCompile">
+    <GenerateResource Sources="Resources/Strings.resx"
+                      OutputResources="$(IntermediateOutputPath)Strings.codegen.resources"
+                      StronglyTypedLanguage="CSharp"
+                      StronglyTypedNamespace="MaterialDepot.App.Resources"
+                      StronglyTypedClassName="Strings"
+                      StronglyTypedManifestPrefix="MaterialDepot.App.Resources"
+                      StronglyTypedFileName="$(IntermediateOutputPath)Strings.Designer.cs"
+                      PublicClass="true"
+                      ExecuteAsTool="false" />
+    <ItemGroup>
+      <Compile Include="$(IntermediateOutputPath)Strings.Designer.cs" Exclude="@(Compile)" />
+      <FileWrites Include="$(IntermediateOutputPath)Strings.Designer.cs;$(IntermediateOutputPath)Strings.codegen.resources" />
+    </ItemGroup>
+  </Target>
 </Project>

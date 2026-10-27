@@ -151,19 +151,15 @@ public class MapFileParserTests
     }
 
     [Theory]
-    [InlineData("", "leer")]
-    [InlineData("   ", "leer")]
-    [InlineData("(?<name>", "kein gültiger regulärer Ausdruck")]
-    [InlineData(@"^(?<name>.+)_(?<res>\d+k)$", "„map“")]
-    [InlineData(@"^(?<map>.+)$", "„name“")]
-    [InlineData(@"^(.+)_(.+)$", "„name“ und „map“")]
-    public void Validate_BadPattern_GivesAGermanMessage(string pattern, string expected)
+    [InlineData("", PatternProblem.Empty)]
+    [InlineData("   ", PatternProblem.Empty)]
+    [InlineData("(?<name>", PatternProblem.NotARegex)]
+    [InlineData(@"^(?<name>.+)_(?<res>\d+k)$", PatternProblem.MapGroupMissing)]
+    [InlineData(@"^(?<map>.+)$", PatternProblem.NameGroupMissing)]
+    [InlineData(@"^(.+)_(.+)$", PatternProblem.NameAndMapGroupsMissing)]
+    public void Validate_BadPattern_GivesTheProblem(string pattern, PatternProblem expected)
     {
-        // Act
-        var error = MapFileParser.Validate(pattern);
-
-        // Assert
-        error.ShouldNotBeNull();
-        error.ShouldContain(expected);
+        // Act & Assert
+        MapFileParser.Validate(pattern).ShouldBe(expected);
     }
 }

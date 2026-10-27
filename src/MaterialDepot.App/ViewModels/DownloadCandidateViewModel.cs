@@ -1,6 +1,7 @@
 using System.IO;
 using System.Windows.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
+using MaterialDepot.App.Resources;
 using MaterialDepot.App.Services;
 using MaterialDepot.Core.Downloads;
 using MaterialDepot.Core.Textures;
@@ -25,7 +26,7 @@ public sealed partial class DownloadCandidateViewModel(DownloadCandidate candida
 
     public string Size { get; } = FormatSize(candidate.Files.Sum(file => file.Length));
 
-    public string Status => Candidate.LibrarySetName is { } set ? $"Schon in der Bibliothek: {set}" : "Neu";
+    public string Status => Candidate.LibrarySetName is { } set ? string.Format(Strings.Inbox_AlreadyInLibrary, set) : Strings.Inbox_New;
 
     /// <summary>
     /// The library set the files are already in, or else the suggested name.
@@ -40,9 +41,9 @@ public sealed partial class DownloadCandidateViewModel(DownloadCandidate candida
 
     public string PlaceholderText => Candidate.Files.FirstOrDefault(file => file.Map == PbrMap.Albedo) switch
     {
-        null => "kein Albedo",
-        { IsInZip: true } => "im Zip",
-        _ => "Vorschau wird erstellt …",
+        null => Strings.Preview_NoAlbedo,
+        { IsInZip: true } => Strings.Preview_InZip,
+        _ => Strings.Preview_Loading,
     };
 
     public async Task LoadThumbnailAsync(ThumbnailLoader loader)

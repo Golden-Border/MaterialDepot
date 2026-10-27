@@ -1,0 +1,477 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Main_LibraryTab" xml:space="preserve">
+    <value>Bibliothek</value>
+  </data>
+  <data name="Main_InboxTab" xml:space="preserve">
+    <value>Eingang</value>
+  </data>
+  <data name="Main_SettingsTab" xml:space="preserve">
+    <value>Einstellungen</value>
+  </data>
+  <data name="Common_Browse" xml:space="preserve">
+    <value>Wählen …</value>
+  </data>
+  <data name="Common_Remove" xml:space="preserve">
+    <value>Entfernen</value>
+  </data>
+  <data name="Common_Close" xml:space="preserve">
+    <value>Schließen</value>
+  </data>
+  <data name="Common_Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="Common_ProjectFolder" xml:space="preserve">
+    <value>Projektordner</value>
+  </data>
+  <data name="Common_SourceImages" xml:space="preserve">
+    <value>Quellbilder</value>
+  </data>
+  <data name="Common_AssetFolder" xml:space="preserve">
+    <value>Asset-Ordner</value>
+  </data>
+  <data name="Common_Textures" xml:space="preserve">
+    <value>Texturen (.sdtex)</value>
+  </data>
+  <data name="Common_Materials" xml:space="preserve">
+    <value>Materialien (.sdmat)</value>
+  </data>
+  <data name="Common_RelativeToAssetFolder" xml:space="preserve">
+    <value>Relativ zum Asset-Ordner</value>
+  </data>
+  <data name="Preview_NoAlbedo" xml:space="preserve">
+    <value>kein Albedo</value>
+  </data>
+  <data name="Preview_InZip" xml:space="preserve">
+    <value>im Zip</value>
+  </data>
+  <data name="Preview_Loading" xml:space="preserve">
+    <value>Vorschau wird erstellt …</value>
+  </data>
+  <data name="Preview_CloudOnly" xml:space="preserve">
+    <value>Albedo nur in der Cloud</value>
+  </data>
+  <data name="Preview_Failed" xml:space="preserve">
+    <value>Vorschau nicht möglich</value>
+  </data>
+  <data name="Library_Search" xml:space="preserve">
+    <value>Suche</value>
+  </data>
+  <data name="Library_Project" xml:space="preserve">
+    <value>Projekt</value>
+  </data>
+  <data name="Library_Rescan" xml:space="preserve">
+    <value>Neu einlesen</value>
+  </data>
+  <data name="Library_InProject" xml:space="preserve">
+    <value>im Projekt</value>
+  </data>
+  <data name="Library_CloudBadge" xml:space="preserve">
+    <value>Cloud</value>
+  </data>
+  <data name="Library_CloudToolTip" xml:space="preserve">
+    <value>Mindestens eine Map liegt nur in der Cloud, nicht auf diesem Rechner.</value>
+  </data>
+  <data name="Library_NoSelection" xml:space="preserve">
+    <value>Ein Set auswählen, um es anzusehen oder in ein Projekt zu übernehmen.</value>
+  </data>
+  <data name="Library_Import" xml:space="preserve">
+    <value>In Projekt übernehmen …</value>
+  </data>
+  <data name="Library_OpenFolder" xml:space="preserve">
+    <value>Ordner öffnen</value>
+  </data>
+  <data name="Library_MissingMaps" xml:space="preserve">
+    <value>Für ein Material braucht das Set mindestens Albedo, Normal und Roughness.</value>
+  </data>
+  <data name="Library_CloudHint" xml:space="preserve">
+    <value>Mindestens eine Map liegt nur in der Cloud. Die Übernahme lädt sie herunter; schlägt das fehl, den Ordner im Explorer über das Kontextmenü des Sync-Clients dauerhaft lokal verfügbar machen.</value>
+  </data>
+  <data name="Library_Summary" xml:space="preserve">
+    <value>{0} Sets{1}</value>
+  </data>
+  <data name="Library_SummaryFiltered" xml:space="preserve">
+    <value>{0} von {1} Sets{2}</value>
+  </data>
+  <data name="Library_SummaryInProject" xml:space="preserve">
+    <value>, {0} davon in {1}</value>
+  </data>
+  <data name="Inbox_Rescan" xml:space="preserve">
+    <value>Downloads neu einlesen</value>
+  </data>
+  <data name="Inbox_Hint" xml:space="preserve">
+    <value>Kopieren lässt die Downloads liegen, Verschieben legt sie danach in den Papierkorb, Löschen legt sie ohne Kopie in den Papierkorb. Eine Datei, die mit anderem Inhalt schon in der Bibliothek liegt, wird nie überschrieben.</value>
+  </data>
+  <data name="Inbox_SetName" xml:space="preserve">
+    <value>Set-Name</value>
+  </data>
+  <data name="Inbox_SetNameToolTip" xml:space="preserve">
+    <value>Ordner in der Bibliothek; am besten der Produktname von textures.com</value>
+  </data>
+  <data name="Inbox_Move" xml:space="preserve">
+    <value>Verschieben</value>
+  </data>
+  <data name="Inbox_Copy" xml:space="preserve">
+    <value>Kopieren</value>
+  </data>
+  <data name="Inbox_Delete" xml:space="preserve">
+    <value>Löschen</value>
+  </data>
+  <data name="Inbox_DeleteToolTip" xml:space="preserve">
+    <value>Die Downloads dieses Sets in den Papierkorb legen, ohne sie in die Bibliothek zu übernehmen</value>
+  </data>
+  <data name="Inbox_New" xml:space="preserve">
+    <value>Neu</value>
+  </data>
+  <data name="Inbox_AlreadyInLibrary" xml:space="preserve">
+    <value>Schon in der Bibliothek: {0}</value>
+  </data>
+  <data name="Inbox_SummaryEmpty" xml:space="preserve">
+    <value>Keine Texturen in {0}</value>
+  </data>
+  <data name="Inbox_Summary" xml:space="preserve">
+    <value>{0} Sets in {1}, {2} davon neu</value>
+  </data>
+  <data name="Inbox_ConfirmDelete" xml:space="preserve">
+    <value>„{0}“ aus den Downloads in den Papierkorb legen?</value>
+  </data>
+  <data name="Inbox_DeleteZipNote" xml:space="preserve">
+    <value>Ein Zip landet als Ganzes im Papierkorb, auch was sonst noch darin ist.</value>
+  </data>
+  <data name="Inbox_Deleted" xml:space="preserve">
+    <value>{0} Downloads von „{1}“ in den Papierkorb.</value>
+  </data>
+  <data name="Inbox_DeleteFailed" xml:space="preserve">
+    <value>Das Löschen ist fehlgeschlagen:&#xA;{0}</value>
+  </data>
+  <data name="Inbox_InvalidSetName" xml:space="preserve">
+    <value>„{0}“ taugt nicht als Ordnername.</value>
+  </data>
+  <data name="Inbox_Conflicts" xml:space="preserve">
+    <value>Diese Dateien liegen schon mit anderem Inhalt in der Bibliothek und wurden nicht überschrieben:</value>
+  </data>
+  <data name="Inbox_DownloadsKept" xml:space="preserve">
+    <value>Die Downloads bleiben deshalb liegen.</value>
+  </data>
+  <data name="Inbox_ArchiveFailed" xml:space="preserve">
+    <value>Das Einsortieren ist fehlgeschlagen:&#xA;{0}</value>
+  </data>
+  <data name="Inbox_Copied" xml:space="preserve">
+    <value>{0} Dateien nach „{1}“ kopiert</value>
+  </data>
+  <data name="Inbox_AlreadyThere" xml:space="preserve">
+    <value>{0} waren schon da</value>
+  </data>
+  <data name="Inbox_Removed" xml:space="preserve">
+    <value>{0} Downloads in den Papierkorb</value>
+  </data>
+  <data name="Import_Title" xml:space="preserve">
+    <value>In Projekt übernehmen</value>
+  </data>
+  <data name="Import_MaterialName" xml:space="preserve">
+    <value>Materialname</value>
+  </data>
+  <data name="Import_MaterialFolder" xml:space="preserve">
+    <value>Material-Ordner</value>
+  </data>
+  <data name="Import_MaterialFolderToolTip" xml:space="preserve">
+    <value>Relativ zum Asset-Ordner des Projekts</value>
+  </data>
+  <data name="Import_TextureFolder" xml:space="preserve">
+    <value>Texturordner</value>
+  </data>
+  <data name="Import_TextureFolderToolTip" xml:space="preserve">
+    <value>Unterordner für die PNGs und die .sdtex; üblich ist der Produktname des Sets</value>
+  </data>
+  <data name="Import_TileSize" xml:space="preserve">
+    <value>Kachelgröße (m, optional)</value>
+  </data>
+  <data name="Import_TileSizeHint" xml:space="preserve">
+    <value>Nur ausfüllen, wenn die Textur in echter Größe liegen soll; textures.com gibt sie an, 20 × 20 cm ist 0,2. In echter Größe kann eine feine Textur aus der Spielkamera zu einer einzigen Farbe verschwimmen.</value>
+  </data>
+  <data name="Import_TileSizeFromName" xml:space="preserve">
+    <value>Laut Dateiname {0} m je Kachel.</value>
+  </data>
+  <data name="Import_MetersPerUvUnit" xml:space="preserve">
+    <value>Meter pro UV-Einheit</value>
+  </data>
+  <data name="Import_MetersPerUvUnitHint" xml:space="preserve">
+    <value>Wie viele Meter eine UV-Einheit auf den Meshes abdeckt, für die das Material gedacht ist.</value>
+  </data>
+  <data name="Import_UvScaleToolTip" xml:space="preserve">
+    <value>Standard 1; mit einer Kachelgröße errechnet aus den beiden Feldern darüber</value>
+  </data>
+  <data name="Import_MaterialId" xml:space="preserve">
+    <value>Material-Id (optional)</value>
+  </data>
+  <data name="Import_MaterialIdToolTip" xml:space="preserve">
+    <value>Nur nötig, wenn Modelle schon eine Material-Id erwarten, die es noch nicht gibt</value>
+  </data>
+  <data name="Import_MaterialExists" xml:space="preserve">
+    <value>{0}.sdmat gibt es schon: Die Id bleibt, der Inhalt wird neu geschrieben.</value>
+  </data>
+  <data name="Import_Done" xml:space="preserve">
+    <value>Fertig. Game Studio liest geänderte Dateien nicht von selbst neu ein: Projekt neu laden.</value>
+  </data>
+  <data name="Import_Importing" xml:space="preserve">
+    <value>Wird übernommen …</value>
+  </data>
+  <data name="Import_Import" xml:space="preserve">
+    <value>Übernehmen</value>
+  </data>
+  <data name="Import_Failed" xml:space="preserve">
+    <value>Die Übernahme ist fehlgeschlagen:&#xA;{0}</value>
+  </data>
+  <data name="Settings_Folders" xml:space="preserve">
+    <value>Ordner</value>
+  </data>
+  <data name="Settings_Library" xml:space="preserve">
+    <value>Bibliothek</value>
+  </data>
+  <data name="Settings_LibraryHint" xml:space="preserve">
+    <value>Ein Unterordner pro Set, mit den Original-Downloads.</value>
+  </data>
+  <data name="Settings_Downloads" xml:space="preserve">
+    <value>Downloads</value>
+  </data>
+  <data name="Settings_DownloadsHint" xml:space="preserve">
+    <value>Hier sucht der Eingang nach neuen Sets, lose und in Zips.</value>
+  </data>
+  <data name="Settings_Language" xml:space="preserve">
+    <value>Sprache</value>
+  </data>
+  <data name="Settings_LanguageSystem" xml:space="preserve">
+    <value>Wie Windows ({0})</value>
+  </data>
+  <data name="Settings_LanguageHint" xml:space="preserve">
+    <value>Gibt es keine Übersetzung für die Windows-Sprache, ist Material Depot auf Englisch. Eine Änderung wirkt nach einem Neustart.</value>
+  </data>
+  <data name="Settings_FileNames" xml:space="preserve">
+    <value>Dateinamen</value>
+  </data>
+  <data name="Settings_RestoreDefaults" xml:space="preserve">
+    <value>Standard wiederherstellen</value>
+  </data>
+  <data name="Settings_AddPattern" xml:space="preserve">
+    <value>Muster hinzufügen</value>
+  </data>
+  <data name="Settings_PatternsHint" xml:space="preserve">
+    <value>Reguläre Ausdrücke, die auf den Dateinamen ohne Endung passen, ohne Beachtung der Groß- und Kleinschreibung; das erste passende Muster gilt. Pflicht sind die benannten Gruppen (?&lt;name&gt;…) für das Set und (?&lt;map&gt;…) für die Map, optional (?&lt;res&gt;…) für die Auflösung.</value>
+  </data>
+  <data name="Settings_PatternNameToolTip" xml:space="preserve">
+    <value>Name des Musters</value>
+  </data>
+  <data name="Settings_MapNames" xml:space="preserve">
+    <value>Namen der Maps</value>
+  </data>
+  <data name="Settings_MapNamesHint" xml:space="preserve">
+    <value>Wie die Map in Dateinamen heißt, durch Komma getrennt. Groß- und Kleinschreibung, Leerzeichen, Binde- und Unterstriche zählen nicht.</value>
+  </data>
+  <data name="Settings_TestFileName" xml:space="preserve">
+    <value>Dateiname testen</value>
+  </data>
+  <data name="Settings_StrideProjects" xml:space="preserve">
+    <value>Stride-Projekte</value>
+  </data>
+  <data name="Settings_AddProject" xml:space="preserve">
+    <value>Projekt hinzufügen</value>
+  </data>
+  <data name="Settings_ProjectsHint" xml:space="preserve">
+    <value>Quellbilder und Asset-Ordner relativ zum Projektordner, Texturen und Materialien relativ zum Asset-Ordner.</value>
+  </data>
+  <data name="Settings_Save" xml:space="preserve">
+    <value>Speichern</value>
+  </data>
+  <data name="Settings_Discard" xml:space="preserve">
+    <value>Verwerfen</value>
+  </data>
+  <data name="Settings_Setup" xml:space="preserve">
+    <value>Einrichtung …</value>
+  </data>
+  <data name="Settings_SetupToolTip" xml:space="preserve">
+    <value>Den Einrichtungs-Assistenten noch einmal öffnen</value>
+  </data>
+  <data name="Settings_NewProject" xml:space="preserve">
+    <value>Neues Projekt</value>
+  </data>
+  <data name="Settings_ConfirmRemoveProject" xml:space="preserve">
+    <value>Projekt „{0}“ aus der Liste nehmen? Am Projekt selbst ändert sich nichts.</value>
+  </data>
+  <data name="Settings_NewPattern" xml:space="preserve">
+    <value>Neues Muster</value>
+  </data>
+  <data name="Settings_NoPattern" xml:space="preserve">
+    <value>Mindestens ein Muster für Dateinamen ist nötig.</value>
+  </data>
+  <data name="Settings_InvalidPattern" xml:space="preserve">
+    <value>Ein Muster für Dateinamen ist ungültig. Bitte korrigieren, dann speichern.</value>
+  </data>
+  <data name="Settings_Saved" xml:space="preserve">
+    <value>Gespeichert.</value>
+  </data>
+  <data name="Settings_SavedRestart" xml:space="preserve">
+    <value>Gespeichert. Die Sprache wechselt nach einem Neustart.</value>
+  </data>
+  <data name="Settings_ConfirmRestart" xml:space="preserve">
+    <value>Die Sprache wechselt nach einem Neustart. Material Depot jetzt neu starten?</value>
+  </data>
+  <data name="Settings_TestNoMatch" xml:space="preserve">
+    <value>Kein Muster passt auf diesen Dateinamen.</value>
+  </data>
+  <data name="Settings_TestUnknownMap" xml:space="preserve">
+    <value>Die Map-Bezeichnung „{0}“ ist bei keiner Map eingetragen.</value>
+  </data>
+  <data name="Settings_TestNoImage" xml:space="preserve">
+    <value>Das ist keine Bilddatei (tif, png, jpg).</value>
+  </data>
+  <data name="Settings_TestResult" xml:space="preserve">
+    <value>Set: {0} · Map: {1} · Auflösung: {2}</value>
+  </data>
+  <data name="Pattern_Empty" xml:space="preserve">
+    <value>Das Muster ist leer.</value>
+  </data>
+  <data name="Pattern_NotARegex" xml:space="preserve">
+    <value>Das ist kein gültiger regulärer Ausdruck.</value>
+  </data>
+  <data name="Pattern_GroupMissing" xml:space="preserve">
+    <value>Es fehlt die benannte Gruppe „{0}“, zum Beispiel (?&lt;{0}&gt;.+).</value>
+  </data>
+  <data name="Pattern_NameAndMapGroupsMissing" xml:space="preserve">
+    <value>Es fehlen die benannten Gruppen „name“ und „map“, zum Beispiel (?&lt;name&gt;.+).</value>
+  </data>
+  <data name="Setup_Title" xml:space="preserve">
+    <value>Einrichtung</value>
+  </data>
+  <data name="Setup_Welcome" xml:space="preserve">
+    <value>Willkommen bei Material Depot</value>
+  </data>
+  <data name="Setup_Skip" xml:space="preserve">
+    <value>Überspringen</value>
+  </data>
+  <data name="Setup_SkipToolTip" xml:space="preserve">
+    <value>Mit den Vorgaben starten; die Einrichtung lässt sich in den Einstellungen wieder öffnen</value>
+  </data>
+  <data name="Setup_Finish" xml:space="preserve">
+    <value>Fertig</value>
+  </data>
+  <data name="Setup_Next" xml:space="preserve">
+    <value>Weiter</value>
+  </data>
+  <data name="Setup_Back" xml:space="preserve">
+    <value>Zurück</value>
+  </data>
+  <data name="Setup_StepLibrary" xml:space="preserve">
+    <value>Schritt 1 von 4: Bibliothek</value>
+  </data>
+  <data name="Setup_StepDownloads" xml:space="preserve">
+    <value>Schritt 2 von 4: Downloads</value>
+  </data>
+  <data name="Setup_StepProject" xml:space="preserve">
+    <value>Schritt 3 von 4: Stride-Projekt (optional)</value>
+  </data>
+  <data name="Setup_StepFlow" xml:space="preserve">
+    <value>Schritt 4 von 4: So läuft es ab</value>
+  </data>
+  <data name="Setup_LibraryIntro" xml:space="preserve">
+    <value>Die Bibliothek ist der Ordner, in dem jedes Textur-Set einen eigenen Unterordner mit den Original-Dateien bekommt.</value>
+  </data>
+  <data name="Setup_DownloadsIntro" xml:space="preserve">
+    <value>Hier sucht der Eingang nach neuen Sets, lose und in Zip-Dateien. Üblich ist der Download-Ordner des Browsers.</value>
+  </data>
+  <data name="Setup_ProjectIntro" xml:space="preserve">
+    <value>Für den Import in Stride braucht Material Depot ein Projekt. Das lässt sich auch später in den Einstellungen hinzufügen.</value>
+  </data>
+  <data name="Setup_AddProject" xml:space="preserve">
+    <value>Ein Stride-Projekt jetzt hinzufügen</value>
+  </data>
+  <data name="Setup_SourceImagesToolTip" xml:space="preserve">
+    <value>Relativ zum Projektordner; hierhin kommen die PNGs, ein Unterordner pro Set</value>
+  </data>
+  <data name="Setup_AssetFolderToolTip" xml:space="preserve">
+    <value>Relativ zum Projektordner; der Assets-Ordner des Stride-Pakets</value>
+  </data>
+  <data name="Setup_FlowIntro" xml:space="preserve">
+    <value>So arbeitest du mit Material Depot:</value>
+  </data>
+  <data name="Setup_Flow1Title" xml:space="preserve">
+    <value>1. Download erkennen: </value>
+  </data>
+  <data name="Setup_Flow1" xml:space="preserve">
+    <value>Lade ein Set herunter. Der Eingang findet neue Sets im Download-Ordner, auch in Zip-Dateien.</value>
+  </data>
+  <data name="Setup_Flow2Title" xml:space="preserve">
+    <value>2. In die Bibliothek übernehmen: </value>
+  </data>
+  <data name="Setup_Flow2" xml:space="preserve">
+    <value>Die Original-Dateien wandern in einen eigenen Ordner pro Set. Die Bibliothek zeigt jedes Set mit seiner Albedo als Vorschau.</value>
+  </data>
+  <data name="Setup_Flow3Title" xml:space="preserve">
+    <value>3. In Stride importieren: </value>
+  </data>
+  <data name="Setup_Flow3" xml:space="preserve">
+    <value>Ein Set lässt sich in ein Projekt übernehmen. Material Depot schreibt die PNGs, die Texturen und das fertige Material.</value>
+  </data>
+  <data name="Setup_Flow4Title" xml:space="preserve">
+    <value>4. Projekt neu laden: </value>
+  </data>
+  <data name="Setup_Flow4" xml:space="preserve">
+    <value>Game Studio liest geänderte Dateien nicht von selbst neu ein. Lade das Projekt nach einem Import neu.</value>
+  </data>
+  <data name="Setup_ReopenHint" xml:space="preserve">
+    <value>Die Einrichtung lässt sich jederzeit in den Einstellungen wieder öffnen.</value>
+  </data>
+  <data name="Setup_NameMissing" xml:space="preserve">
+    <value>Bitte einen Namen angeben.</value>
+  </data>
+  <data name="Setup_RootMissing" xml:space="preserve">
+    <value>Der Projektordner existiert nicht.</value>
+  </data>
+  <data name="Setup_RootInvalid" xml:space="preserve">
+    <value>Der Projektordner muss ein vollständiger Ordnerpfad sein.</value>
+  </data>
+  <data name="Setup_SourceTextureDirectoryInvalid" xml:space="preserve">
+    <value>Quellbilder: ein relativer Pfad im Projektordner ist nötig.</value>
+  </data>
+  <data name="Setup_AssetsDirectoryInvalid" xml:space="preserve">
+    <value>Asset-Ordner: ein relativer Pfad im Projektordner ist nötig.</value>
+  </data>
+  <data name="Setup_TextureAssetDirectoryInvalid" xml:space="preserve">
+    <value>Texturen: ein relativer Pfad im Asset-Ordner ist nötig.</value>
+  </data>
+  <data name="Setup_MaterialDirectoryInvalid" xml:space="preserve">
+    <value>Materialien: ein relativer Pfad im Asset-Ordner ist nötig.</value>
+  </data>
+  <data name="Setup_NotApplied" xml:space="preserve">
+    <value>Die Einstellungen konnten nicht übernommen werden: {0}</value>
+  </data>
+  <data name="Folder_Found" xml:space="preserve">
+    <value>Ordner gefunden.</value>
+  </data>
+  <data name="Folder_WillBeCreated" xml:space="preserve">
+    <value>Den Ordner gibt es noch nicht, er wird angelegt.</value>
+  </data>
+  <data name="Folder_Missing" xml:space="preserve">
+    <value>Diesen Ordner gibt es nicht.</value>
+  </data>
+  <data name="Folder_Empty" xml:space="preserve">
+    <value>Bitte einen Ordner angeben.</value>
+  </data>
+  <data name="Folder_IsFile" xml:space="preserve">
+    <value>Das ist eine Datei, kein Ordner.</value>
+  </data>
+  <data name="Folder_Invalid" xml:space="preserve">
+    <value>Das ist kein vollständiger Ordnerpfad.</value>
+  </data>
+</root>
