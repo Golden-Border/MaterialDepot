@@ -3,10 +3,15 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>net10.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>Assets\MaterialDepot.ico</ApplicationIcon>
     <!-- English is in Strings.resx and the fallback for every language without a translation. -->
     <NeutralLanguage>en</NeutralLanguage>
     <SatelliteResourceLanguages>de</SatelliteResourceLanguages>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\MaterialDepot.ico" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Mvvm" />

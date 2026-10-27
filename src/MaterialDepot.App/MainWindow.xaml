@@ -8,7 +8,7 @@
         xmlns:vm="clr-namespace:MaterialDepot.App.ViewModels"
         mc:Ignorable="d"
         d:DataContext="{d:DesignInstance Type=vm:MainViewModel}"
-        Title="Material Depot" Width="1360" Height="860" MinWidth="900" MinHeight="560"
+        Title="Material Depot" Icon="Assets/MaterialDepot.ico" Width="1360" Height="860" MinWidth="900" MinHeight="560"
         WindowStartupLocation="CenterScreen"
         Activated="OnActivated">
     <TabControl Margin="8" Padding="0" BorderThickness="0" Background="Transparent">
