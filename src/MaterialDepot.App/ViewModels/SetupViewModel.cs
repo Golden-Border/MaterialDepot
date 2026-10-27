@@ -2,6 +2,7 @@ using System.ComponentModel;
 using System.IO;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using MaterialDepot.App.Resources;
 using MaterialDepot.App.Services;
 using MaterialDepot.Core.Setup;
 using MaterialDepot.Core.Stride;
@@ -65,10 +66,10 @@ public sealed partial class SetupViewModel(DepotSession session, SetupGuide guid
 
     public string StepTitle => Step switch
     {
-        0 => "Schritt 1 von 4: Bibliothek",
-        1 => "Schritt 2 von 4: Downloads",
-        2 => "Schritt 3 von 4: Stride-Projekt (optional)",
-        _ => "Schritt 4 von 4: So läuft es ab",
+        0 => Strings.Setup_StepLibrary,
+        1 => Strings.Setup_StepDownloads,
+        2 => Strings.Setup_StepProject,
+        _ => Strings.Setup_StepFlow,
     };
 
     public string LibraryNote => FolderNote(SetupValidator.CheckFolder(LibraryRoot), missingIsFine: true);
@@ -86,13 +87,13 @@ public sealed partial class SetupViewModel(DepotSession session, SetupGuide guid
 
             return SetupValidator.CheckProject(BuildProject()).FirstOrDefault() switch
             {
-                ProjectProblem.NameMissing => "Bitte einen Namen angeben.",
-                ProjectProblem.RootMissing => "Der Projektordner existiert nicht.",
-                ProjectProblem.RootInvalid => "Der Projektordner muss ein vollständiger Ordnerpfad sein.",
-                ProjectProblem.SourceTextureDirectoryInvalid => "Quellbilder: ein relativer Pfad im Projektordner ist nötig.",
-                ProjectProblem.AssetsDirectoryInvalid => "Asset-Ordner: ein relativer Pfad im Projektordner ist nötig.",
-                ProjectProblem.TextureAssetDirectoryInvalid => "Texturen: ein relativer Pfad im Asset-Ordner ist nötig.",
-                ProjectProblem.MaterialDirectoryInvalid => "Materialien: ein relativer Pfad im Asset-Ordner ist nötig.",
+                ProjectProblem.NameMissing => Strings.Setup_NameMissing,
+                ProjectProblem.RootMissing => Strings.Setup_RootMissing,
+                ProjectProblem.RootInvalid => Strings.Setup_RootInvalid,
+                ProjectProblem.SourceTextureDirectoryInvalid => Strings.Setup_SourceTextureDirectoryInvalid,
+                ProjectProblem.AssetsDirectoryInvalid => Strings.Setup_AssetsDirectoryInvalid,
+                ProjectProblem.TextureAssetDirectoryInvalid => Strings.Setup_TextureAssetDirectoryInvalid,
+                ProjectProblem.MaterialDirectoryInvalid => Strings.Setup_MaterialDirectoryInvalid,
                 _ => string.Empty,
             };
         }
@@ -169,7 +170,7 @@ public sealed partial class SetupViewModel(DepotSession session, SetupGuide guid
         }
         catch (Exception exception) when (exception is IOException or UnauthorizedAccessException)
         {
-            dialogs.ShowError($"Die Einstellungen konnten nicht übernommen werden: {exception.Message}");
+            dialogs.ShowError(string.Format(Strings.Setup_NotApplied, exception.Message));
             return;
         }
 
@@ -184,11 +185,11 @@ public sealed partial class SetupViewModel(DepotSession session, SetupGuide guid
 
     private static string FolderNote(FolderStatus status, bool missingIsFine) => status switch
     {
-        FolderStatus.Exists => "Ordner gefunden.",
-        FolderStatus.Missing when missingIsFine => "Der Ordner gibt es noch nicht, er wird angelegt.",
-        FolderStatus.Missing => "Diesen Ordner gibt es nicht.",
-        FolderStatus.Empty => "Bitte einen Ordner angeben.",
-        FolderStatus.IsFile => "Das ist eine Datei, kein Ordner.",
-        _ => "Das ist kein vollständiger Ordnerpfad.",
+        FolderStatus.Exists => Strings.Folder_Found,
+        FolderStatus.Missing when missingIsFine => Strings.Folder_WillBeCreated,
+        FolderStatus.Missing => Strings.Folder_Missing,
+        FolderStatus.Empty => Strings.Folder_Empty,
+        FolderStatus.IsFile => Strings.Folder_IsFile,
+        _ => Strings.Folder_Invalid,
     };
 }

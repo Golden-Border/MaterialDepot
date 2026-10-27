@@ -37,14 +37,13 @@ public sealed class MapFileParser
     public static MapFileParser Default { get; } = new(DefaultTextureNaming.FilePatterns, DefaultTextureNaming.MapNames);
 
     /// <summary>
-    /// Why <paramref name="pattern"/> cannot be used as a file name pattern, in German for the settings, or
-    /// <see langword="null"/> when it is fine.
+    /// Why <paramref name="pattern"/> cannot be used as a file name pattern, or <see langword="null"/> when it is fine.
     /// </summary>
-    public static string? Validate(string pattern)
+    public static PatternProblem? Validate(string pattern)
     {
         if (string.IsNullOrWhiteSpace(pattern))
         {
-            return "Das Muster ist leer.";
+            return PatternProblem.Empty;
         }
 
         Regex regex;
@@ -54,14 +53,17 @@ public sealed class MapFileParser
         }
         catch (ArgumentException)
         {
-            return "Das ist kein gültiger regulärer Ausdruck.";
+            return PatternProblem.NotARegex;
         }
 
         var groups = regex.GetGroupNames();
-        var missing = new[] { "name", "map" }.Where(group => !groups.Contains(group)).ToList();
-        return missing.Count == 0
-            ? null
-            : $"Es fehlt die benannte Gruppe {string.Join(" und ", missing.Select(group => $"„{group}“"))}, zum Beispiel (?<{missing[0]}>.+).";
+        return (groups.Contains("name"), groups.Contains("map")) switch
+        {
+            (true, true) => null,
+            (false, true) => PatternProblem.NameGroupMissing,
+            (true, false) => PatternProblem.MapGroupMissing,
+            _ => PatternProblem.NameAndMapGroupsMissing,
+        };
     }
 
     /// <summary>

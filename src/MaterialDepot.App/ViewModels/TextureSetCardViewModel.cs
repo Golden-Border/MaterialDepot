@@ -1,6 +1,7 @@
 using System.IO;
 using System.Windows.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
+using MaterialDepot.App.Resources;
 using MaterialDepot.App.Services;
 using MaterialDepot.Core.Library;
 using MaterialDepot.Core.Textures;
@@ -38,7 +39,7 @@ public sealed partial class TextureSetCardViewModel(TextureSet set, string libra
     public bool HasCloudOnlyMaps { get; } = set.Maps.Values.Any(map => FileAvailability.IsCloudOnly(map.Path));
 
     [ObservableProperty]
-    public partial string PlaceholderText { get; set; } = set.Albedo is null ? "kein Albedo" : "Vorschau wird erstellt …";
+    public partial string PlaceholderText { get; set; } = set.Albedo is null ? Strings.Preview_NoAlbedo : Strings.Preview_Loading;
 
     [ObservableProperty]
     public partial ImageSource? Thumbnail { get; set; }
@@ -56,14 +57,14 @@ public sealed partial class TextureSetCardViewModel(TextureSet set, string libra
         // A cloud-only albedo is not read: browsing the library would otherwise download every set.
         if (FileAvailability.IsCloudOnly(albedo.Path))
         {
-            PlaceholderText = "Albedo nur in der Cloud";
+            PlaceholderText = Strings.Preview_CloudOnly;
             return;
         }
 
         Thumbnail = await loader.LoadAsync(albedo.Path);
         if (Thumbnail is null)
         {
-            PlaceholderText = "Vorschau nicht möglich";
+            PlaceholderText = Strings.Preview_Failed;
         }
     }
 

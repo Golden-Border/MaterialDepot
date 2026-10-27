@@ -18,7 +18,7 @@ dotnet test ./MaterialDepot.slnx --no-build
 dotnet run --project src/MaterialDepot.App
 ```
 
-Requires the .NET 10 SDK on Windows. The UI is in German.
+Requires the .NET 10 SDK on Windows. The UI is in English and German: it follows the Windows display language, falls back to English for any other language, and can be set in the settings.
 
 ## Notes
 

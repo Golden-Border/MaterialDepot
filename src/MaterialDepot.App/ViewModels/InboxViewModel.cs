@@ -2,6 +2,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using MaterialDepot.App.Resources;
 using MaterialDepot.App.Services;
 using MaterialDepot.Core.Downloads;
 
@@ -86,8 +87,8 @@ public sealed partial class InboxViewModel : ObservableObject
 
         NewCount = found.Count(candidate => !candidate.IsInLibrary);
         Summary = found.Count == 0
-            ? $"Keine Texturen in {downloads}"
-            : $"{found.Count} Sets in {downloads}, {NewCount} davon neu";
+            ? string.Format(Strings.Inbox_SummaryEmpty, downloads)
+            : string.Format(Strings.Inbox_Summary, found.Count, downloads, NewCount);
     }
 
     [RelayCommand]
@@ -101,10 +102,10 @@ public sealed partial class InboxViewModel : ObservableObject
     {
         var sources = item.Candidate.SourceFiles.ToList();
         var zipNote = item.Candidate.Files.Any(file => file.IsInZip)
-            ? "\n\nEin Zip landet als Ganzes im Papierkorb, auch was sonst noch darin ist."
+            ? "\n\n" + Strings.Inbox_DeleteZipNote
             : string.Empty;
         if (!dialogs.Confirm(
-            $"„{item.BaseName}“ aus den Downloads in den Papierkorb legen?\n\n"
+            string.Format(Strings.Inbox_ConfirmDelete, item.BaseName) + "\n\n"
             + string.Join("\n", sources.Select(Path.GetFileName))
             + zipNote))
         {
@@ -115,12 +116,12 @@ public sealed partial class InboxViewModel : ObservableObject
         try
         {
             await Task.Run(() => sources.ForEach(fileRemover.Remove));
-            LastAction = $"{sources.Count} Downloads von „{item.BaseName}“ in den Papierkorb.";
+            LastAction = string.Format(Strings.Inbox_Deleted, sources.Count, item.BaseName);
             await RescanAsync();
         }
         catch (Exception exception) when (exception is IOException or UnauthorizedAccessException or OperationCanceledException)
         {
-            dialogs.ShowError($"Das Löschen ist fehlgeschlagen:\n{exception.Message}");
+            dialogs.ShowError(string.Format(Strings.Inbox_DeleteFailed, exception.Message));
         }
         finally
         {
@@ -134,7 +135,7 @@ public sealed partial class InboxViewModel : ObservableObject
         var libraryRoot = session.Settings.LibraryRoot;
         if (setName.Length == 0 || setName.IndexOfAny(Path.GetInvalidFileNameChars()) >= 0)
         {
-            dialogs.ShowError($"„{item.SetName}“ taugt nicht als Ordnername.");
+            dialogs.ShowError(string.Format(Strings.Inbox_InvalidSetName, item.SetName));
             return;
         }
 
@@ -146,16 +147,16 @@ public sealed partial class InboxViewModel : ObservableObject
             if (result.Conflicts.Count > 0)
             {
                 dialogs.ShowError(
-                    "Diese Dateien liegen schon mit anderem Inhalt in der Bibliothek und wurden nicht überschrieben:\n"
+                    Strings.Inbox_Conflicts + "\n"
                     + string.Join("\n", result.Conflicts.Select(Path.GetFileName))
-                    + (move ? "\n\nDie Downloads bleiben deshalb liegen." : string.Empty));
+                    + (move ? "\n\n" + Strings.Inbox_DownloadsKept : string.Empty));
             }
 
             await session.RescanLibraryAsync();
         }
         catch (Exception exception) when (exception is IOException or UnauthorizedAccessException or InvalidDataException)
         {
-            dialogs.ShowError($"Das Einsortieren ist fehlgeschlagen:\n{exception.Message}");
+            dialogs.ShowError(string.Format(Strings.Inbox_ArchiveFailed, exception.Message));
         }
         finally
         {
@@ -165,15 +166,15 @@ public sealed partial class InboxViewModel : ObservableObject
 
     private static string Describe(ArchiveResult result, string setName)
     {
-        var parts = new List<string> { $"{result.Copied.Count} Dateien nach „{setName}“ kopiert" };
+        var parts = new List<string> { string.Format(Strings.Inbox_Copied, result.Copied.Count, setName) };
         if (result.AlreadyThere.Count > 0)
         {
-            parts.Add($"{result.AlreadyThere.Count} waren schon da");
+            parts.Add(string.Format(Strings.Inbox_AlreadyThere, result.AlreadyThere.Count));
         }
 
         if (result.Removed.Count > 0)
         {
-            parts.Add($"{result.Removed.Count} Downloads in den Papierkorb");
+            parts.Add(string.Format(Strings.Inbox_Removed, result.Removed.Count));
         }
 
         return string.Join(", ", parts) + ".";

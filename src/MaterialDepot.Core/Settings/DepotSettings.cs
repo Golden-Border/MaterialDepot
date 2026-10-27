@@ -13,18 +13,21 @@ public sealed record DepotSettings
     /// <param name="projects">The import targets.</param>
     /// <param name="filePatterns">Named regular expressions that recognise map files, see <see cref="MapFileParser"/>; <see langword="null"/> (a settings file from before they existed) means <see cref="DefaultTextureNaming.FilePatterns"/>.</param>
     /// <param name="mapNames">The names each map goes by in file names; <see langword="null"/> means <see cref="DefaultTextureNaming.MapNames"/>.</param>
+    /// <param name="language">The UI language, one of <see cref="UiLanguages.Supported"/>; <see langword="null"/> follows Windows.</param>
     public DepotSettings(
         string libraryRoot,
         string downloadsDirectory,
         IReadOnlyList<StrideProject> projects,
         IReadOnlyList<FilePattern>? filePatterns = null,
-        IReadOnlyDictionary<PbrMap, IReadOnlyList<string>>? mapNames = null)
+        IReadOnlyDictionary<PbrMap, IReadOnlyList<string>>? mapNames = null,
+        string? language = null)
     {
         LibraryRoot = libraryRoot;
         DownloadsDirectory = downloadsDirectory;
         Projects = projects;
         FilePatterns = filePatterns is { Count: > 0 } ? filePatterns : DefaultTextureNaming.FilePatterns;
         MapNames = mapNames is { Count: > 0 } ? mapNames : DefaultTextureNaming.MapNames;
+        Language = language;
     }
 
     public string LibraryRoot { get; }
@@ -36,6 +39,8 @@ public sealed record DepotSettings
     public IReadOnlyList<FilePattern> FilePatterns { get; }
 
     public IReadOnlyDictionary<PbrMap, IReadOnlyList<string>> MapNames { get; }
+
+    public string? Language { get; }
 
     /// <summary>
     /// The library in a Textures folder and the browser downloads of the user; no Stride project until one is added.

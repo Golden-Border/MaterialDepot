@@ -1,4 +1,5 @@
 using CommunityToolkit.Mvvm.ComponentModel;
+using MaterialDepot.App.Resources;
 using MaterialDepot.Core.Textures;
 
 namespace MaterialDepot.App.ViewModels;
@@ -15,7 +16,15 @@ public sealed partial class PatternEditorViewModel(FilePattern pattern) : Observ
     [NotifyPropertyChangedFor(nameof(Error), nameof(HasError))]
     public partial string Text { get; set; } = pattern.Regex;
 
-    public string? Error => MapFileParser.Validate(Text);
+    public string? Error => MapFileParser.Validate(Text) switch
+    {
+        null => null,
+        PatternProblem.Empty => Strings.Pattern_Empty,
+        PatternProblem.NotARegex => Strings.Pattern_NotARegex,
+        PatternProblem.NameGroupMissing => string.Format(Strings.Pattern_GroupMissing, "name"),
+        PatternProblem.MapGroupMissing => string.Format(Strings.Pattern_GroupMissing, "map"),
+        _ => Strings.Pattern_NameAndMapGroupsMissing,
+    };
 
     public bool HasError => Error is not null;
 

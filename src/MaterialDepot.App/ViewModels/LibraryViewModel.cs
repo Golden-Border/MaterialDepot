@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Windows.Data;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using MaterialDepot.App.Resources;
 using MaterialDepot.App.Services;
 using MaterialDepot.Core.Stride;
 
@@ -157,7 +158,9 @@ public sealed partial class LibraryViewModel : ObservableObject
     {
         var shown = sets.Count(card => card.Matches(SearchText));
         var inProject = sets.Count(card => card.IsInProject);
-        var projectPart = SelectedProject is { } project ? $", {inProject} davon in {project.Name}" : string.Empty;
-        Summary = shown == sets.Count ? $"{sets.Count} Sets{projectPart}" : $"{shown} von {sets.Count} Sets{projectPart}";
+        var projectPart = SelectedProject is { } project ? string.Format(Strings.Library_SummaryInProject, inProject, project.Name) : string.Empty;
+        Summary = shown == sets.Count
+            ? string.Format(Strings.Library_Summary, sets.Count, projectPart)
+            : string.Format(Strings.Library_SummaryFiltered, shown, sets.Count, projectPart);
     }
 }

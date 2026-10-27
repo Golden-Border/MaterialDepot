@@ -1,6 +1,7 @@
 using MaterialDepot.Core.Settings;
 using MaterialDepot.Core.Setup;
 using MaterialDepot.Core.Stride;
+using MaterialDepot.Core.Textures;
 using Moq;
 
 namespace MaterialDepot.Core.Tests.Setup;
@@ -83,6 +84,23 @@ public sealed class SetupTests : IDisposable
 
         // Assert
         settings.Projects.ShouldBe([existing, added]);
+    }
+
+    [Fact]
+    public void Apply_KeepsTheFileNamesAndTheLanguage()
+    {
+        // Arrange
+        var patterns = new[] { new FilePattern("Eigenes", @"^(?<name>.+)\.(?<map>[a-z]+)$") };
+        var mapNames = new Dictionary<PbrMap, IReadOnlyList<string>> { [PbrMap.Albedo] = ["col"] };
+        var current = new DepotSettings(temp.Combine("Lib"), temp.Combine("Down"), [], patterns, mapNames, "en");
+
+        // Act
+        var settings = sut.Apply(current, temp.Combine("Neu"), current.DownloadsDirectory, null);
+
+        // Assert
+        settings.FilePatterns.ShouldBe(patterns);
+        settings.MapNames.ShouldBeSameAs(mapNames);
+        settings.Language.ShouldBe("en");
     }
 
     [Fact]

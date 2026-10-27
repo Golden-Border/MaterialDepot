@@ -3,6 +3,7 @@ using System.IO;
 using System.Windows.Media;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using MaterialDepot.App.Resources;
 using MaterialDepot.App.Services;
 using MaterialDepot.Core.Stride;
 using MaterialDepot.Core.Textures;
@@ -29,7 +30,7 @@ public sealed partial class ImportViewModel(TextureSet set, StrideProject projec
     /// The tile size textures.com puts into some file names (<c>_4x4_</c>), as a hint; it is not applied on its own.
     /// </summary>
     public string TileSizeFromName { get; } = TextureSetNaming.TileSizeMeters(set.Albedo?.BaseName ?? string.Empty) is { } size
-        ? $"Laut Dateiname {Format(size)} m je Kachel."
+        ? string.Format(Strings.Import_TileSizeFromName, Format(size))
         : string.Empty;
 
     [ObservableProperty]
@@ -86,7 +87,7 @@ public sealed partial class ImportViewModel(TextureSet set, StrideProject projec
         {
             var path = MaterialPath();
             return path is not null && File.Exists(path)
-                ? $"{MaterialName}.sdmat gibt es schon: Die Id bleibt, der Inhalt wird neu geschrieben."
+                ? string.Format(Strings.Import_MaterialExists, MaterialName)
                 : string.Empty;
         }
     }
@@ -109,7 +110,7 @@ public sealed partial class ImportViewModel(TextureSet set, StrideProject projec
         }
         catch (Exception exception) when (exception is IOException or UnauthorizedAccessException or InvalidOperationException or ImageMagick.MagickException)
         {
-            dialogs.ShowError($"Die Übernahme ist fehlgeschlagen:\n{exception.Message}");
+            dialogs.ShowError(string.Format(Strings.Import_Failed, exception.Message));
         }
         finally
         {
@@ -152,7 +153,7 @@ public sealed partial class ImportViewModel(TextureSet set, StrideProject projec
         !string.IsNullOrWhiteSpace(name) && name.IndexOfAny(Path.GetInvalidFileNameChars()) < 0;
 
     /// <summary>
-    /// Accepts a decimal comma as well as a point, since the user types German numbers.
+    /// Accepts a decimal comma as well as a point, whatever the language, since German users type a comma.
     /// </summary>
     private static double? ParseNumber(string? text) =>
         double.TryParse(text?.Trim().Replace(',', '.'), NumberStyles.Float, CultureInfo.InvariantCulture, out var value) ? value : null;

@@ -48,4 +48,13 @@ public sealed class DialogService : IDialogService
 
         return dialog.ShowDialog(Application.Current.MainWindow) == true ? dialog.FolderName : null;
     }
+
+    public void Restart()
+    {
+        if (Environment.ProcessPath is { } executable)
+        {
+            Process.Start(new ProcessStartInfo(executable) { UseShellExecute = true });
+            Application.Current.Shutdown();
+        }
+    }
 }

@@ -1,8 +1,10 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Globalization;
 using System.IO;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using MaterialDepot.App.Resources;
 using MaterialDepot.App.Services;
 using MaterialDepot.Core.Settings;
 using MaterialDepot.Core.Setup;
@@ -19,15 +21,31 @@ public sealed partial class SettingsViewModel : ObservableObject
     private readonly DepotSession session;
     private readonly IDialogService dialogs;
     private readonly SetupGuide setupGuide;
+    private readonly AppLanguage language;
 
-    public SettingsViewModel(DepotSession session, SetupGuide setupGuide, IDialogService dialogs)
+    public SettingsViewModel(DepotSession session, SetupGuide setupGuide, AppLanguage language, IDialogService dialogs)
     {
         this.session = session;
         this.setupGuide = setupGuide;
+        this.language = language;
         this.dialogs = dialogs;
+        Languages =
+        [
+            new LanguageOption(null, string.Format(Strings.Settings_LanguageSystem, NativeName(language.Resolve(null)))),
+            .. UiLanguages.Supported.Select(name => new LanguageOption(name, NativeName(name))),
+        ];
+        SelectedLanguage = Languages[0];
         Patterns.CollectionChanged += (_, _) => UpdateTestResult();
         Reset();
     }
+
+    /// <summary>
+    /// "Same as Windows", then every language there is a translation for.
+    /// </summary>
+    public IReadOnlyList<LanguageOption> Languages { get; }
+
+    [ObservableProperty]
+    public partial LanguageOption SelectedLanguage { get; set; }
 
     public ObservableCollection<ProjectEditorViewModel> Projects { get; } = [];
 
@@ -72,7 +90,7 @@ public sealed partial class SettingsViewModel : ObservableObject
     [RelayCommand]
     private void AddProject()
     {
-        var project = new ProjectEditorViewModel(new StrideProject("Neues Projekt", string.Empty, "Assets/Textures", "Assets", "Materials", "Materials"));
+        var project = new ProjectEditorViewModel(new StrideProject(Strings.Settings_NewProject, string.Empty, "Assets/Textures", "Assets", "Materials", "Materials"));
         Projects.Add(project);
         SelectedProject = project;
     }
@@ -80,14 +98,14 @@ public sealed partial class SettingsViewModel : ObservableObject
     [RelayCommand(CanExecute = nameof(HasSelectedProject))]
     private void RemoveProject()
     {
-        if (SelectedProject is { } project && dialogs.Confirm($"Projekt „{project.Name}“ aus der Liste nehmen? Am Projekt selbst ändert sich nichts."))
+        if (SelectedProject is { } project && dialogs.Confirm(string.Format(Strings.Settings_ConfirmRemoveProject, project.Name)))
         {
             Projects.Remove(project);
         }
     }
 
     [RelayCommand]
-    private void AddPattern() => Patterns.Add(Watch(new PatternEditorViewModel(new FilePattern("Neues Muster", "^(?<name>.+?)_(?<map>[A-Za-z]+)$"))));
+    private void AddPattern() => Patterns.Add(Watch(new PatternEditorViewModel(new FilePattern(Strings.Settings_NewPattern, "^(?<name>.+?)_(?<map>[A-Za-z]+)$"))));
 
     [RelayCommand]
     private void RemovePattern(PatternEditorViewModel pattern) => Patterns.Remove(pattern);
@@ -106,13 +124,13 @@ public sealed partial class SettingsViewModel : ObservableObject
         SavedNote = string.Empty;
         if (Patterns.Count == 0)
         {
-            ErrorNote = "Mindestens ein Muster für Dateinamen ist nötig.";
+            ErrorNote = Strings.Settings_NoPattern;
             return;
         }
 
         if (Patterns.Any(pattern => pattern.HasError))
         {
-            ErrorNote = "Ein Muster für Dateinamen ist ungültig. Bitte korrigieren, dann speichern.";
+            ErrorNote = Strings.Settings_InvalidPattern;
             return;
         }
 
@@ -122,10 +140,22 @@ public sealed partial class SettingsViewModel : ObservableObject
             DownloadsDirectory.Trim(),
             [.. Projects.Select(project => project.ToProject())],
             [.. Patterns.Select(pattern => pattern.ToPattern())],
-            MapNames.ToDictionary(row => row.Map, row => row.Names));
+            MapNames.ToDictionary(row => row.Map, row => row.Names),
+            SelectedLanguage.Language);
         var rescan = old.LibraryRoot != settings.LibraryRoot || !SameNaming(old, settings);
         session.SaveSettings(settings);
-        SavedNote = "Gespeichert.";
+        SavedNote = Strings.Settings_Saved;
+        if (language.Resolve(old.Language) != language.Resolve(settings.Language))
+        {
+            if (dialogs.Confirm(Strings.Settings_ConfirmRestart))
+            {
+                dialogs.Restart();
+                return;
+            }
+
+            SavedNote = Strings.Settings_SavedRestart;
+        }
+
         if (rescan)
         {
             await session.RescanLibraryAsync();
@@ -148,6 +178,7 @@ public sealed partial class SettingsViewModel : ObservableObject
         var settings = session.Settings;
         LibraryRoot = settings.LibraryRoot;
         DownloadsDirectory = settings.DownloadsDirectory;
+        SelectedLanguage = Languages.FirstOrDefault(option => option.Language == settings.Language) ?? Languages[0];
         Projects.Clear();
         foreach (var project in settings.Projects)
         {
@@ -206,12 +237,14 @@ public sealed partial class SettingsViewModel : ObservableObject
         var parsed = parser.Parse(Path.GetFileNameWithoutExtension(fileName));
         TestResult = parsed switch
         {
-            null => "Kein Muster passt auf diesen Dateinamen.",
-            { Map: null } => $"Die Map-Bezeichnung „{parsed.MapToken}“ ist bei keiner Map eingetragen.",
-            _ when !parser.TryParse(fileName, out _) => "Das ist keine Bilddatei (tif, png, jpg).",
-            _ => $"Set: {parsed.Name} · Map: {MapLabels.Of(parsed.Map.Value)} · Auflösung: {parsed.Resolution ?? "–"}",
+            null => Strings.Settings_TestNoMatch,
+            { Map: null } => string.Format(Strings.Settings_TestUnknownMap, parsed.MapToken),
+            _ when !parser.TryParse(fileName, out _) => Strings.Settings_TestNoImage,
+            _ => string.Format(Strings.Settings_TestResult, parsed.Name, MapLabels.Of(parsed.Map.Value), parsed.Resolution ?? "–"),
         };
     }
 
     private bool HasSelectedProject() => SelectedProject is not null;
+
+    private static string NativeName(string language) => CultureInfo.GetCultureInfo(language).NativeName;
 }
