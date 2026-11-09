@@ -72,6 +72,21 @@
   <data name="Library_Project" xml:space="preserve">
     <value>Projekt</value>
   </data>
+  <data name="Library_Worktree" xml:space="preserve">
+    <value>Worktree</value>
+  </data>
+  <data name="Library_WorktreeToolTip" xml:space="preserve">
+    <value>Der Worktree des Projekt-Repositorys, in den übernommen wird und nach dem Sets als im Projekt markiert werden.</value>
+  </data>
+  <data name="Library_WorktreeLabel" xml:space="preserve">
+    <value>{0} in {1}</value>
+  </data>
+  <data name="Library_DetachedHead" xml:space="preserve">
+    <value>losgelöst bei {0}</value>
+  </data>
+  <data name="Library_ProjectInWorktree" xml:space="preserve">
+    <value>{0} auf {1}</value>
+  </data>
   <data name="Library_Rescan" xml:space="preserve">
     <value>Neu einlesen</value>
   </data>

@@ -52,6 +52,7 @@ public partial class App : Application
         services.AddSingleton<IDownloadArchiver, DownloadArchiver>();
         services.AddSingleton<IStrideProjectInventory, StrideProjectInventory>();
         services.AddSingleton<IStrideMaterialImporter, StrideMaterialImporter>();
+        services.AddSingleton<IProjectWorktreeFinder, GitProjectWorktreeFinder>();
 
         services.AddSingleton(new AppLanguage(CultureInfo.CurrentUICulture));
         services.AddSingleton<SetupGuide>();

@@ -72,6 +72,21 @@
   <data name="Library_Project" xml:space="preserve">
     <value>Project</value>
   </data>
+  <data name="Library_Worktree" xml:space="preserve">
+    <value>Worktree</value>
+  </data>
+  <data name="Library_WorktreeToolTip" xml:space="preserve">
+    <value>The worktree of the project repository to import into and to mark sets as in the project.</value>
+  </data>
+  <data name="Library_WorktreeLabel" xml:space="preserve">
+    <value>{0} in {1}</value>
+  </data>
+  <data name="Library_DetachedHead" xml:space="preserve">
+    <value>detached at {0}</value>
+  </data>
+  <data name="Library_ProjectInWorktree" xml:space="preserve">
+    <value>{0} on {1}</value>
+  </data>
   <data name="Library_Rescan" xml:space="preserve">
     <value>Rescan</value>
   </data>

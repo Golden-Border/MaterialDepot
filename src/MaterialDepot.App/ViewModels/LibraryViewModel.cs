@@ -18,6 +18,7 @@ public sealed partial class LibraryViewModel : ObservableObject
     private readonly ThumbnailLoader thumbnails;
     private readonly IStrideProjectInventory inventory;
     private readonly IStrideMaterialImporter importer;
+    private readonly IProjectWorktreeFinder worktreeFinder;
     private readonly IDialogService dialogs;
     private readonly ObservableCollection<TextureSetCardViewModel> sets = [];
     private IReadOnlySet<string> projectStems = new HashSet<string>();
@@ -27,12 +28,14 @@ public sealed partial class LibraryViewModel : ObservableObject
         ThumbnailLoader thumbnails,
         IStrideProjectInventory inventory,
         IStrideMaterialImporter importer,
+        IProjectWorktreeFinder worktreeFinder,
         IDialogService dialogs)
     {
         this.session = session;
         this.thumbnails = thumbnails;
         this.inventory = inventory;
         this.importer = importer;
+        this.worktreeFinder = worktreeFinder;
         this.dialogs = dialogs;
         Sets = CollectionViewSource.GetDefaultView(sets);
         Sets.Filter = item => item is TextureSetCardViewModel card && card.Matches(SearchText);
@@ -56,7 +59,29 @@ public sealed partial class LibraryViewModel : ObservableObject
 
     [ObservableProperty]
     [NotifyCanExecuteChangedFor(nameof(ImportCommand))]
+    [NotifyPropertyChangedFor(nameof(TargetProject))]
     public partial StrideProject? SelectedProject { get; set; }
+
+    /// <summary>
+    /// The worktrees of the selected project's repository; empty when the project is not in a Git repository.
+    /// </summary>
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HasWorktrees))]
+    public partial IReadOnlyList<WorktreeOption> Worktrees { get; set; } = [];
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(TargetProject))]
+    public partial WorktreeOption? SelectedWorktree { get; set; }
+
+    /// <summary>
+    /// Whether there is a worktree to choose besides the configured one.
+    /// </summary>
+    public bool HasWorktrees => Worktrees.Count > 1;
+
+    /// <summary>
+    /// The project in the chosen worktree: what the import writes to and the "in project" marks are read from.
+    /// </summary>
+    public StrideProject? TargetProject => SelectedWorktree?.Target.Project ?? SelectedProject;
 
     [ObservableProperty]
     public partial bool IsScanning { get; set; }
@@ -70,6 +95,7 @@ public sealed partial class LibraryViewModel : ObservableObject
         IsScanning = true;
         try
         {
+            ShowWorktrees();
             await session.RescanLibraryAsync();
         }
         finally
@@ -81,12 +107,12 @@ public sealed partial class LibraryViewModel : ObservableObject
     [RelayCommand(CanExecute = nameof(CanImport))]
     private void Import()
     {
-        if (SelectedSet is not { } card || SelectedProject is not { } project)
+        if (SelectedSet is not { } card || TargetProject is not { } project)
         {
             return;
         }
 
-        var import = new ImportViewModel(card.Set, project, importer, dialogs) { Thumbnail = card.Thumbnail };
+        var import = new ImportViewModel(card.Set, project, importer, dialogs) { Thumbnail = card.Thumbnail, TargetName = TargetName(project) };
         if (dialogs.ShowImport(import))
         {
             _ = RefreshProjectStemsAsync();
@@ -112,7 +138,32 @@ public sealed partial class LibraryViewModel : ObservableObject
         UpdateSummary();
     }
 
-    partial void OnSelectedProjectChanged(StrideProject? value) => _ = RefreshProjectStemsAsync();
+    partial void OnSelectedProjectChanged(StrideProject? value) => ShowWorktrees();
+
+    partial void OnSelectedWorktreeChanged(WorktreeOption? value) => _ = RefreshProjectStemsAsync();
+
+    /// <summary>
+    /// Reads the worktrees of the selected project's repository anew; keeps the chosen one if it is still there, else
+    /// chooses the one the configured project root lies in.
+    /// </summary>
+    private void ShowWorktrees()
+    {
+        var chosen = SelectedWorktree?.Directory;
+        List<WorktreeOption> options = SelectedProject is { } project
+            ? [.. worktreeFinder.Find(project).Select(target => new WorktreeOption(target))]
+            : [];
+        Worktrees = options;
+        var selected = options.FirstOrDefault(option => string.Equals(option.Directory, chosen, StringComparison.OrdinalIgnoreCase))
+            ?? options.FirstOrDefault(option => option.Target.IsConfigured);
+        if (Equals(selected, SelectedWorktree))
+        {
+            _ = RefreshProjectStemsAsync();
+        }
+        else
+        {
+            SelectedWorktree = selected;
+        }
+    }
 
     private void ShowLibrary()
     {
@@ -142,8 +193,14 @@ public sealed partial class LibraryViewModel : ObservableObject
 
     private async Task RefreshProjectStemsAsync()
     {
-        var project = SelectedProject;
-        projectStems = project is null ? new HashSet<string>() : await Task.Run(() => inventory.ImportedStems(project));
+        var project = TargetProject;
+        var stems = project is null ? new HashSet<string>() : await Task.Run(() => inventory.ImportedStems(project));
+        if (!Equals(project, TargetProject))
+        {
+            return;
+        }
+
+        projectStems = stems;
         foreach (var card in sets)
         {
             card.IsInProject = IsInProject(card.Set.Albedo?.Stem);
@@ -152,13 +209,21 @@ public sealed partial class LibraryViewModel : ObservableObject
         UpdateSummary();
     }
 
+    /// <summary>
+    /// The project's name, with the branch when there are worktrees to choose from.
+    /// </summary>
+    private string TargetName(StrideProject project) =>
+        HasWorktrees && SelectedWorktree is { } worktree
+            ? string.Format(Strings.Library_ProjectInWorktree, project.Name, worktree.Branch)
+            : project.Name;
+
     private bool IsInProject(string? albedoStem) => albedoStem is not null && projectStems.Contains(albedoStem);
 
     private void UpdateSummary()
     {
         var shown = sets.Count(card => card.Matches(SearchText));
         var inProject = sets.Count(card => card.IsInProject);
-        var projectPart = SelectedProject is { } project ? string.Format(Strings.Library_SummaryInProject, inProject, project.Name) : string.Empty;
+        var projectPart = TargetProject is { } project ? string.Format(Strings.Library_SummaryInProject, inProject, TargetName(project)) : string.Empty;
         Summary = shown == sets.Count
             ? string.Format(Strings.Library_Summary, sets.Count, projectPart)
             : string.Format(Strings.Library_SummaryFiltered, shown, sets.Count, projectPart);

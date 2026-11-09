@@ -46,8 +46,8 @@
                     </Style>
                 </Grid.Resources>
 
-                <TextBlock Grid.ColumnSpan="2" Margin="0,0,0,10" Style="{StaticResource Heading}">
-                    <Run Text="{Binding Set.Name, Mode=OneWay}" /><Run Text=" → " Foreground="{StaticResource Muted}" /><Run Text="{Binding Project.Name, Mode=OneWay}" />
+                <TextBlock Grid.ColumnSpan="2" Margin="0,0,0,10" Style="{StaticResource Heading}" ToolTip="{Binding Project.RootDirectory}">
+                    <Run Text="{Binding Set.Name, Mode=OneWay}" /><Run Text=" → " Foreground="{StaticResource Muted}" /><Run Text="{Binding TargetName, Mode=OneWay}" />
                 </TextBlock>
 
                 <TextBlock Grid.Row="1" Text="{x:Static res:Strings.Import_MaterialName}" />

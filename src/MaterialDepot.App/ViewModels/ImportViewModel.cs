@@ -27,6 +27,11 @@ public sealed partial class ImportViewModel(TextureSet set, StrideProject projec
     public ImageSource? Thumbnail { get; init; }
 
     /// <summary>
+    /// How the heading names the target: the project's name, with the branch when it goes into a chosen worktree.
+    /// </summary>
+    public string TargetName { get; init; } = project.Name;
+
+    /// <summary>
     /// The tile size textures.com puts into some file names (<c>_4x4_</c>), as a hint; it is not applied on its own.
     /// </summary>
     public string TileSizeFromName { get; } = TextureSetNaming.TileSizeMeters(set.Albedo?.BaseName ?? string.Empty) is { } size
