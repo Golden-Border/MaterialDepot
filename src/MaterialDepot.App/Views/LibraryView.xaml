@@ -22,6 +22,17 @@
             <TextBox DockPanel.Dock="Left" Width="260" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" />
             <TextBlock DockPanel.Dock="Left" Text="{x:Static res:Strings.Library_Project}" Margin="20,0,12,0" VerticalAlignment="Center" />
             <ComboBox DockPanel.Dock="Left" Width="180" ItemsSource="{Binding Projects}" SelectedItem="{Binding SelectedProject}" DisplayMemberPath="Name" />
+            <TextBlock DockPanel.Dock="Left" Text="{x:Static res:Strings.Library_Worktree}" Margin="12,0,12,0" VerticalAlignment="Center"
+                       Visibility="{Binding HasWorktrees, Converter={StaticResource Presence}}" />
+            <ComboBox DockPanel.Dock="Left" Width="240" ItemsSource="{Binding Worktrees}" SelectedItem="{Binding SelectedWorktree}"
+                      AutomationProperties.Name="{x:Static res:Strings.Library_Worktree}" ToolTip="{x:Static res:Strings.Library_WorktreeToolTip}"
+                      Visibility="{Binding HasWorktrees, Converter={StaticResource Presence}}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate DataType="{x:Type vm:WorktreeOption}">
+                        <TextBlock Text="{Binding Label}" TextTrimming="CharacterEllipsis" ToolTip="{Binding Directory}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
             <Button DockPanel.Dock="Left" Margin="12,0,0,0" Content="{x:Static res:Strings.Library_Rescan}" Command="{Binding RescanCommand}" />
             <TextBlock DockPanel.Dock="Right" Text="{Binding Summary}" Style="{StaticResource MutedText}" FontSize="12.5" VerticalAlignment="Center" />
         </DockPanel>
